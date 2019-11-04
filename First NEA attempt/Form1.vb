@@ -632,10 +632,6 @@ Module module1
                 Continue Do
             End If
 
-
-
-
-
             ChildListX.Clear()
             ChildListY.Clear()
             i += 1
@@ -653,6 +649,32 @@ Module module1
                 End If
             Next
         Next
+    End Function
+
+    Dim ChildG As Integer
+    Dim ChildH As Integer
+    Dim ChildF As Integer
+    Dim ParentG As New List(Of Integer)
+
+
+    Function AStar2()
+        Dim ParentCount = 0
+
+        For i = 0 To ChildListX.Count
+            If ChildListX(i) = 950 And ChildListY(i) = 950 Then
+                Exit For
+            Else
+                ChildG = ParentG(ParentCount) + (ChildListX(i) - CurrentX) + (ChildListY(i) - CurrentY)
+                ChildH = (950 - ChildListX(i)) + (950 - ChildListY(i))
+                ChildF = ChildH + ChildG
+            End If
+
+            If ChildG = 
+
+        Next
+
+
+
     End Function
 
 
@@ -759,7 +781,7 @@ Module module1
                 ChildListY.Add(y - 50)    'Up coordinate   Y
 
             End If
-            If Maze(x + 50, y) = False e Then
+            If Maze(x + 50, y) = False Then
                 ChildListX.Add(x + 50)      'Right coordinate  X
                 ChildListY.Add(y)           'Right coordinate   Y
 
