@@ -38,7 +38,7 @@ Module module1
 
     'Marks all cells as false, and then turns the paths true. Then go through, and for all squares false, put a wall. 
 
-     Sub Main()
+    Sub Main()
         Randomize()
 
         For y = 0 To 950 Step 50
@@ -587,32 +587,44 @@ Module module1
     Dim OpenListY As New List(Of Integer)
     Dim ClosedListX As New List(Of Integer)
     Dim ClosedListY As New List(Of Integer)
-    Dim f As New List(Of Integer)  'total cost of node  = g+h
-    Dim g As New List(Of Integer)   'distance from the start
-    Dim h As New List(Of Integer)   'heuristic best guess
-    Dim ChildListX As New List(Of Integer)
-    Dim ChildListY As New List(Of Integer)
     Dim fmin As Integer = 0
     Dim CurrentX As Integer = 0
     Dim CurrentY As Integer = 0
-    Dim cost As Integer
+    Dim count As Integer = 0
+    Public Item() As Node
+
+    Public Class Node
+        Public ParentX As Integer
+        Public ParentY As Integer
+        Public ChildX As Integer
+        Public ChildY As Integer
+        Public f As Integer         'total cost of node  = g+h
+        Public g As Integer         'distance from the start
+        Public h As Integer         'heuristic best guess
+    End Class
+
 
     Function AStar()
         Dim i As Integer = 0
         Dim found As Boolean = False
+        Dim PreviousItemLength As Integer
 
         OpenListX.Add(0)
         OpenListY.Add(0)
 
+
+
         Do
-            g.Add(i)
-            h.Add(CurrentX + CurrentY)
-            f.Add(h(i) + g(i))
-            For b = 0 To f.Count
-                If f(b) <= fmin Then
+            Item(i).g = i
+            Item(i).h = CurrentX + CurrentY
+            Item(i).f = Item(i).h + Item(i).g
+
+            For b = 0 To Item.Length
+                If Item(b).f <= fmin Then
                     fmin = b
                 End If
             Next
+
             CurrentX = OpenListX(fmin)
             CurrentY = OpenListY(fmin)
             ClosedListX.Add(CurrentX)
@@ -623,7 +635,10 @@ Module module1
             If CurrentX = 950 And CurrentY = 950 Then
                 found = True
             End If
+            PreviousItemLength = Item.Length
             Child(CurrentX, CurrentY)
+
+            MakeChoice(PreviousItemLength)
 
             If CheckInClosed() = True Then
                 ChildListX.Clear()
@@ -637,9 +652,21 @@ Module module1
             i += 1
         Loop While OpenListX.Count <> 0 Or found = False
 
+    End Function
+
+    Function MakeChoice(ByVal PrevLength As Integer)
+
+        For i = PrevLength + 1 To Item.Length
+
+            If Item(i).
+
+            End If
+        Next
+
 
 
     End Function
+
 
     Function CheckInClosed()
         For a = 0 To ClosedListX.Count
@@ -651,483 +678,462 @@ Module module1
         Next
     End Function
 
-    Dim ChildG As Integer
-    Dim ChildH As Integer
-    Dim ChildF As Integer
-    Dim ParentG As New List(Of Integer)
-
-
-    Function AStar2()
-        Dim ParentCount = 0
-
-        For i = 0 To ChildListX.Count
-            If ChildListX(i) = 950 And ChildListY(i) = 950 Then
-                Exit For
-            Else
-                ChildG = ParentG(ParentCount) + (ChildListX(i) - CurrentX) + (ChildListY(i) - CurrentY)
-                ChildH = (950 - ChildListX(i)) + (950 - ChildListY(i))
-                ChildF = ChildH + ChildG
-            End If
-
-            If ChildG = 
-
-        Next
-
-
-
-    End Function
-
 
 
     Function Child(ByVal x As Integer, ByVal y As Integer)
 
         If x = 0 And y = 0 Then                       'Top left corner
             If Maze(x, y - 50) = False Then
-                ChildListX.Add(x)          'Down coordinate    X
-                ChildListY.Add(y + 50)      'Down coordinate   Y
+                Item(count).ChildX = x          'Down coordinate    X
+                Item(count).ChildY = (y + 50)      'Down coordinate   Y
             End If
             If Maze(x + 50, y) = False Then
-                ChildListX.Add(x + 50)      'Right coordinate    X
-                ChildListY.Add(y)         'Right coordinate   Y
+                Item(count).ChildX = x + 50      'Right coordinate    X
+                Item(count).ChildY = (y)         'Right coordinate   Y
             End If
 
         ElseIf x = 0 And y = 950 Then                 'Bottom left corner
             If Maze(x, y - 50) = False Then
-                ChildListX.Add(x)          'Up coordinate    X
-                ChildListY.Add(y - 50)     'Up coordinate   Y
+                Item(count).ChildX = x          'Up coordinate    X
+                Item(count).ChildY = (y - 50)     'Up coordinate   Y
             End If
             If Maze(x + 50, y) = False Then
-                ChildListX.Add(x + 50)      'Right coordinate  X
-                ChildListY.Add(y)           'Right coordinate   Y
+                Item(count).ChildX = x + 50      'Right coordinate  X
+                Item(count).ChildY = (y)           'Right coordinate   Y
             End If
 
         ElseIf x = 950 And y = 0 Then                 'Top right corner
             If Maze(x, y + 50) = False Then
-                ChildListX.Add(x)           'Down coordinate    X
-                ChildListY.Add(y + 50)     'Down coordinate   Y
+                Item(count).ChildX = x           'Down coordinate    X
+                Item(count).ChildY = (y + 50)     'Down coordinate   Y
             End If
             If Maze(x - 50, y) = False Then
-                ChildListX.Add(x - 50)    'Left coordinate    X
-                ChildListY.Add(y)          'Left coordinate   Y
+                Item(count).ChildX = (x - 50)    'Left coordinate    X
+                Item(count).ChildY = (y)          'Left coordinate   Y
 
             End If
 
         ElseIf x = 950 And y = 950 Then               'Bottom right corner
             If Maze(x, y - 50) = False Then
-                ChildListX.Add(x)        'Up coordinate    X
-                ChildListY.Add(y - 50)     'Up coordinate   Y
+                Item(count).ChildX = (x)        'Up coordinate    X
+                Item(count).ChildY = (y - 50)     'Up coordinate   Y
 
             End If
             If Maze(x - 50, y) = False Then
-                ChildListX.Add(x - 50)      'Left coordinate   X
-                ChildListY.Add(y)         'Left coordinate   Y
+                Item(count).ChildX = (x - 50)      'Left coordinate   X
+                Item(count).ChildY = (y)         'Left coordinate   Y
 
             End If
 
         ElseIf x = 0 And y = 50 Then                      'special case
             If Maze(x, y + 50) = False Then
-                ChildListX.Add(x)           'Down coordinate    X
-                ChildListY.Add(y + 50)      'Down coordinate   Y
+                Item(count).ChildX = (x)           'Down coordinate    X
+                Item(count).ChildY = (y + 50)      'Down coordinate   Y
 
             End If
             If Maze(x + 50, y) = False Then
-                ChildListX.Add(x + 50)     'Right coordinate    X
-                ChildListY.Add(y)          'Right coordinate   Y
+                Item(count).ChildX = (x + 50)     'Right coordinate    X
+                Item(count).ChildY = (y)          'Right coordinate   Y
 
             End If
             If Maze(x, y - 50) = False Then
-                ChildListX.Add(x)             'Up coordinate   X
-                ChildListY.Add(y - 50)        'Up coordinate   Y
+                Item(count).ChildX = (x)             'Up coordinate   X
+                Item(count).ChildY = (y - 50)        'Up coordinate   Y
 
             End If
 
         ElseIf x = 0 And y = 900 Then           'special case
             If Maze(x, y + 50) = False Then
-                ChildListX.Add(x)           'Down coordinate    X
-                ChildListY.Add(y + 50)      'Down coordinate   Y
+                Item(count).ChildX = (x)           'Down coordinate    X
+                Item(count).ChildY = (y + 50)      'Down coordinate   Y
 
             End If
             If Maze(x + 50, y) = False Then
-                ChildListX.Add(x + 50)     'Right coordinate    X
-                ChildListY.Add(y)          'Right coordinate   Y
+                Item(count).ChildX = (x + 50)     'Right coordinate    X
+                Item(count).ChildY = (y)          'Right coordinate   Y
 
             End If
             If Maze(x, y - 50) = False Then
-                ChildListX.Add(x)             'Up coordinate   X
-                ChildListY.Add(y - 50)        'Up coordinate   Y
+                Item(count).ChildX = (x)             'Up coordinate   X
+                Item(count).ChildY = (y - 50)        'Up coordinate   Y
 
             End If
 
         ElseIf x = 50 And y = 0 Then                       'special case
             If Maze(x, y + 50) = False Then
-                ChildListX.Add(x)          'Down coordinate   X
-                ChildListY.Add(y + 50)     'Down coordinate   Y
+                Item(count).ChildX = (x)          'Down coordinate   X
+                Item(count).ChildY = (y + 50)     'Down coordinate   Y
 
             End If
             If Maze(x - 50, y) = False Then
-                ChildListX.Add(x - 50)         'Left coordinate X
-                ChildListY.Add(y)             'Left coordinate Y
+                Item(count).ChildX = (x - 50)         'Left coordinate X
+                Item(count).ChildY = (y)             'Left coordinate Y
 
             End If
             If Maze(x + 50, y) = False Then
-                ChildListX.Add(x + 50)      'Right coordinate  X
-                ChildListY.Add(y)           'Right coordinate   Y
+                Item(count).ChildX = (x + 50)      'Right coordinate  X
+                Item(count).ChildY = (y)           'Right coordinate   Y
 
             End If
 
         ElseIf x = 50 And y = 50 Then              'special case
             If Maze(x, y - 50) = False Then
-                ChildListX.Add(x)           'Up coordinate    X
-                ChildListY.Add(y - 50)    'Up coordinate   Y
+                Item(count).ChildX = (x)           'Up coordinate    X
+                Item(count).ChildY = (y - 50)    'Up coordinate   Y
 
             End If
             If Maze(x + 50, y) = False Then
-                ChildListX.Add(x + 50)      'Right coordinate  X
-                ChildListY.Add(y)           'Right coordinate   Y
+                Item(count).ChildX = (x + 50)      'Right coordinate  X
+                Item(count).ChildY = (y)           'Right coordinate   Y
 
             End If
             If Maze(x - 50, y) = False Then
-                ChildListX.Add(x - 50)     'Left coordinate   X
-                ChildListY.Add(y)          'Left coordinate   Y
+                Item(count).ChildX = (x - 50)     'Left coordinate   X
+                Item(count).ChildY = (y)          'Left coordinate   Y
 
             End If
             If Maze(x, y + 50) = False Then
-                ChildListX.Add(x)        'Down coordinate X
-                ChildListY.Add(y + 50)      'Down coordinate Y
+                Item(count).ChildX = (x)        'Down coordinate X
+                Item(count).ChildY = (y + 50)      'Down coordinate Y
 
             End If
 
         ElseIf x = 50 And 99 < y And y < 851 Then                     'special case
             If Maze(x, y - 50) = False Then
-                ChildListX.Add(x)           'Up coordinat    X
-                ChildListY.Add(y - 50)    'Up coordinate   Y
+                Item(count).ChildX = (x)           'Up coordinat    X
+                Item(count).ChildY = (y - 50)    'Up coordinate   Y
 
             End If
             If Maze(x + 50, y) = False Then
-                ChildListX.Add(x + 50)      'Right coordinate  X
-                ChildListY.Add(y)           'Right coordinate   Y
+                Item(count).ChildX = (x + 50)      'Right coordinate  X
+                Item(count).ChildY = (y)           'Right coordinate   Y
 
             End If
             If Maze(x - 50, y) = False Then
-                ChildListX.Add(x - 50)     'Left coordinate   X
-                ChildListY.Add(y)          'Left coordinate   Y
+                Item(count).ChildX = (x - 50)     'Left coordinate   X
+                Item(count).ChildY = (y)          'Left coordinate   Y
 
             End If
             If Maze(x, y + 50) = False Then
-                ChildListX.Add(x)        'own coordinate X
-                ChildListY.Add(y + 50)      'Down coordinate Y
+                Item(count).ChildX = x        'own coordinate X
+                Item(count).ChildY = (y + 50)      'Down coordinate Y
 
             End If
 
         ElseIf x = 50 And y = 900 Then           'special case
             If Maze(x, y - 50) = False Then
-                ChildListX.Add(x)           'Up coordinate    X
-                ChildListY.Add(y - 50)    'Up coordinate   Y
+                Item(count).ChildX = (x)           'Up coordinate    X
+                Item(count).ChildY = (y - 50)    'Up coordinate   Y
 
             End If
             If Maze(x + 50, y) = False Then
-                ChildListX.Add(x + 50)      'Right coordinate  X
-                ChildListY.Add(y)           'Right coordinate   Y
+                Item(count).ChildX = (x + 50)      'Right coordinate  X
+                Item(count).ChildY = (y)           'Right coordinate   Y
 
             End If
             If Maze(x - 50, y) = False Then
-                ChildListX.Add(x - 50)     'Left coordinate   X
-                ChildListY.Add(y)          'Left coordinate   Y
+                Item(count).ChildX = (x - 50)     'Left coordinate   X
+                Item(count).ChildY = (y)          'Left coordinate   Y
 
             End If
             If Maze(x, y + 50) = False Then
-                ChildListX.Add(x)        'Down coordinate X
-                ChildListY.Add(y + 50)      'Down coordinate Y
+                Item(count).ChildX = (x)        'Down coordinate X
+                Item(count).ChildY = (y + 50)      'Down coordinate Y
 
             End If
 
         ElseIf x = 50 And y = 950 Then          'special case 
             If Maze(x, y - 50) = False Then
-                ChildListX.Add(x)           'Up coordinate    X
-                ChildListY.Add(y - 50)      'Up coordinate   Y
+                Item(count).ChildX = (x)           'Up coordinate    X
+                Item(count).ChildY = (y - 50)      'Up coordinate   Y
 
             End If
             If Maze(x + 50, y) = False Then
-                ChildListX.Add(x + 50)      'Right coordinate  X
-                ChildListY.Add(y)         'Right coordinate   Y
+                Item(count).ChildX = (x + 50)      'Right coordinate  X
+                Item(count).ChildY = (y)         'Right coordinate   Y
 
             End If
             If Maze(x - 50, y) = False Then
-                ChildListX.Add(x - 50)      'Left coordinate   X
-                ChildListY.Add(y)           'Left coordinate   Y
+                Item(count).ChildX = (x - 50)      'Left coordinate   X
+                Item(count).ChildY = (y)           'Left coordinate   Y
 
             End If
 
         ElseIf 99 < x And x < 851 And y = 50 Then                 'special case
             If Maze(x, y - 50) = False Then
-                ChildListX.Add(x)           'Up coordinate    X
-                ChildListY.Add(y - 50)    'Up coordinate   Y
+                Item(count).ChildX = (x)           'Up coordinate    X
+                Item(count).ChildY = (y - 50)    'Up coordinate   Y
 
             End If
             If Maze(x + 50, y) = False Then
-                ChildListX.Add(x + 50)      'Right coordinate  X
-                ChildListY.Add(y)           'Right coordinate   Y
+                Item(count).ChildX = (x + 50)      'Right coordinate  X
+                Item(count).ChildY = (y)           'Right coordinate   Y
 
             End If
             If Maze(x - 50, y) = False Then
-                ChildListX.Add(x - 50)     'Left coordinate   X
-                ChildListY.Add(y)          'Left coordinate   Y
+                Item(count).ChildX = (x - 50)     'Left coordinate   X
+                Item(count).ChildY = (y)          'Left coordinate   Y
 
             End If
             If Maze(x, y + 50) = False Then
-                ChildListX.Add(x)        'Down coordinate X
-                ChildListY.Add(y + 50)      'Down coordinate Y
+                Item(count).ChildX = (x)        'Down coordinate X
+                Item(count).ChildY = (y + 50)      'Down coordinate Y
 
             End If
 
         ElseIf 99 < x And x < 851 And y = 900 Then         'special case
             If Maze(x, y - 50) = False Then
-                ChildListX.Add(x)           'Up coordinate    X
-                ChildListY.Add(y - 50)    'Up coordinate   Y
+                Item(count).ChildX = (x)           'Up coordinate    X
+                Item(count).ChildY = (y - 50)    'Up coordinate   Y
 
             End If
             If Maze(x + 50, y) = False Then
-                ChildListX.Add(x + 50)      'Right coordinate  X
-                ChildListY.Add(y)           'Right coordinate   Y
+                Item(count).ChildX = (x + 50)      'Right coordinate  X
+                Item(count).ChildY = (y)           'Right coordinate   Y
 
             End If
             If Maze(x - 50, y) = False Then
-                ChildListX.Add(x - 50)     'Left coordinate   X
-                ChildListY.Add(y)          'Left coordinate   Y
+                Item(count).ChildX = (x - 50)     'Left coordinate   X
+                Item(count).ChildY = (y)          'Left coordinate   Y
 
             End If
             If Maze(x, y + 50) = False Then
-                ChildListX.Add(x)        'Down coordinate X
-                ChildListY.Add(y + 50)      'Down coordinate Y
+                Item(count).ChildX = (x)        'Down coordinate X
+                Item(count).ChildY = (y + 50)      'Down coordinate Y
 
             End If
 
         ElseIf x = 900 And y = 0 Then         'special case
             If Maze(x + 50, y) = False Then
-                ChildListX.Add(x + 50)      'Right coordinate  X
-                ChildListY.Add(y)           'Right coordinate   Y
+                Item(count).ChildX = (x + 50)      'Right coordinate  X
+                Item(count).ChildY = (y)           'Right coordinate   Y
 
             End If
             If Maze(x - 50, y) = False Then
-                ChildListX.Add(x - 50)     'Left coordinate   X
-                ChildListY.Add(y)          'Left coordinate   Y
+                Item(count).ChildX = (x - 50)     'Left coordinate   X
+                Item(count).ChildY = (y)          'Left coordinate   Y
 
             End If
             If Maze(x, y + 50) = False Then
-                ChildListX.Add(x)        'Down coordinate X
-                ChildListY.Add(y + 50)      'Down coordinate Y
+                Item(count).ChildX = (x)        'Down coordinate X
+                Item(count).ChildY = (y + 50)      'Down coordinate Y
 
             End If
 
         ElseIf x = 900 And y = 50 Then              'special case
             If Maze(x, y - 50) = False Then
-                ChildListX.Add(x)           'Up coordinate    X
-                ChildListY.Add(y - 50)    'Up coordinate   Y
+                Item(count).ChildX = (x)           'Up coordinate    X
+                Item(count).ChildY = (y - 50)    'Up coordinate   Y
 
             End If
             If Maze(x + 50, y) = False Then
-                ChildListX.Add(x + 50)      'Right coordinate  X
-                ChildListY.Add(y)           'Right coordinate   Y
+                Item(count).ChildX = (x + 50)      'Right coordinate  X
+                Item(count).ChildY = (y)           'Right coordinate   Y
 
             End If
             If Maze(x - 50, y) = False Then
-                ChildListX.Add(x - 50)     'Left coordinate   X
-                ChildListY.Add(y)          'Left coordinate   Y
+                Item(count).ChildX = (x - 50)     'Left coordinate   X
+                Item(count).ChildY = (y)          'Left coordinate   Y
 
             End If
             If Maze(x, y + 50) = False Then
-                ChildListX.Add(x)        'Down coordinate X
-                ChildListY.Add(y + 50)      'Down coordinate Y
+                Item(count).ChildX = (x)        'Down coordinate X
+                Item(count).ChildY = (y + 50)      'Down coordinate Y
 
             End If
 
         ElseIf x = 900 And 99 < y And y < 851 Then            'special case
             If Maze(x, y - 50) = False Then
-                ChildListX.Add(x)           'Up coordinate    X
-                ChildListY.Add(y - 50)    'Up coordinate   Y
+                Item(count).ChildX = (x)           'Up coordinate    X
+                Item(count).ChildY = (y - 50)    'Up coordinate   Y
 
             End If
             If Maze(x + 50, y) = False Then
-                ChildListX.Add(x + 50)      'Right coordinate  X
-                ChildListY.Add(y)           'Right coordinate   Y
+                Item(count).ChildX = (x + 50)      'Right coordinate  X
+                Item(count).ChildY = (y)           'Right coordinate   Y
 
             End If
             If Maze(x - 50, y) = False Then
-                ChildListX.Add(x - 50)     'Left coordinate   X
-                ChildListY.Add(y)          'Left coordinate   Y
+                Item(count).ChildX = (x - 50)     'Left coordinate   X
+                Item(count).ChildY = (y)          'Left coordinate   Y
 
             End If
             If Maze(x, y + 50) = False Then
-                ChildListX.Add(x)        'Down coordinate X
-                ChildListY.Add(y + 50)      'Down coordinate Y
+                Item(count).ChildX = x        'Down coordinate X
+                Item(count).ChildY = (y + 50)      'Down coordinate Y
 
             End If
 
         ElseIf x = 900 And y = 900 Then                     'special case
             If Maze(x, y - 50) = False Then
-                ChildListX.Add(x)           'Up coordinate    X
-                ChildListY.Add(y - 50)    'Up coordinate   Y
+                Item(count).ChildX = (x)           'Up coordinate    X
+                Item(count).ChildY = (y - 50)    'Up coordinate   Y
 
             End If
             If Maze(x + 50, y) = False Then
-                ChildListX.Add(x + 50)      'Right coordinate  X
-                ChildListY.Add(y)           'Right coordinate   Y
+                Item(count).ChildX = (x + 50)      'Right coordinate  X
+                Item(count).ChildY = (y)           'Right coordinate   Y
 
             End If
             If Maze(x - 50, y) = False Then
-                ChildListX.Add(x - 50)     'Left coordinate   X
-                ChildListY.Add(y)          'Left coordinate   Y
+                Item(count).ChildX = (x - 50)     'Left coordinate   X
+                Item(count).ChildY = y         'Left coordinate   Y
 
             End If
             If Maze(x, y + 50) = False Then
-                ChildListX.Add(x)        'Down coordinate X
-                ChildListY.Add(y + 50)      'Down coordinate Y
+                Item(count).ChildX = (x)        'Down coordinate X
+                Item(count).ChildY = (y + 50)      'Down coordinate Y
 
             End If
 
         ElseIf x = 900 And y = 950 Then                'special case
             If Maze(x, y - 50) = False Then
-                ChildListX.Add(x)           'Up coordinate    X
-                ChildListY.Add(y - 50)    'Up coordinate   Y
+                Item(count).ChildX = (x)           'Up coordinate    X
+                Item(count).ChildY = (y - 50)    'Up coordinate   Y
 
             End If
             If Maze(x + 50, y) = False Then
-                ChildListX.Add(x + 50)      'Right coordinate  X
-                ChildListY.Add(y)           'Right coordinate   Y
+                Item(count).ChildX = (x + 50)      'Right coordinate  X
+                Item(count).ChildY = (y)           'Right coordinate   Y
 
             End If
             If Maze(x - 50, y) = False Then
-                ChildListX.Add(x - 50)     'Left coordinate   X
-                ChildListY.Add(y)          'Left coordinate   Y
+                Item(count).ChildX = (x - 50)     'Left coordinate   X
+                Item(count).ChildY = (y)          'Left coordinate   Y
 
             End If
 
         ElseIf x = 950 And y = 50 Then                'special case
             If Maze(x, y - 50) = False Then
-                ChildListX.Add(x)           'Up coordinate    X
-                ChildListY.Add(y - 50)    'Up coordinate   Y
+                Item(count).ChildX = (x)           'Up coordinate    X
+                Item(count).ChildY = (y - 50)    'Up coordinate   Y
 
             End If
             If Maze(x - 50, y) = False Then
-                ChildListX.Add(x - 50)     'Left coordinate   X
-                ChildListY.Add(y)          'Left coordinate   Y
+                Item(count).ChildX = (x - 50)     'Left coordinate   X
+                Item(count).ChildY = (y)          'Left coordinate   Y
 
             End If
             If Maze(x, y + 50) = False Then
-                ChildListX.Add(x)        'Down coordinate X
-                ChildListY.Add(y + 50)      'Down coordinate Y
+                Item(count).ChildX = (x)        'Down coordinate X
+                Item(count).ChildY = (y + 50)      'Down coordinate Y
 
             End If
 
         ElseIf x = 950 And y = 900 Then             'special case
             If Maze(x, y - 50) = False Then
-                ChildListX.Add(x)           'Up coordinate    X
-                ChildListY.Add(y - 50)    'Up coordinate   Y
+                Item(count).ChildX = x           'Up coordinate    X
+                Item(count).ChildY = (y - 50)    'Up coordinate   Y
 
             End If
             If Maze(x - 50, y) = False Then
-                ChildListX.Add(x - 50)     'Left coordinate   X
-                ChildListY.Add(y)          'Left coordinate   Y
+                Item(count).ChildX = (x - 50)     'Left coordinate   X
+                Item(count).ChildY = (y)          'Left coordinate   Y
 
             End If
             If Maze(x, y + 50) = False Then
-                ChildListX.Add(x)        'Down coordinate X
-                ChildListY.Add(y + 50)      'Down coordinate Y
+                Item(count).ChildX = (x)        'Down coordinate X
+                Item(count).ChildY = (y + 50)      'Down coordinate Y
 
             End If
 
         ElseIf x = 0 Then                             'If the current square is at the left border
             If Maze(x, y + 50) = False Then
-                ChildListX.Add(x)           'Down coordinate    X
-                ChildListY.Add(y + 50)      'Down coordinate   Y
+                Item(count).ChildX = (x)           'Down coordinate    X
+                Item(count).ChildY = (y + 50)      'Down coordinate   Y
 
             End If
             If Maze(x + 50, y) = False Then
-                ChildListX.Add(x + 50)     'Right coordinate    X
-                ChildListY.Add(y)          'Right coordinate   Y
+                Item(count).ChildX = (x + 50)     'Right coordinate    X
+                Item(count).ChildY = (y)          'Right coordinate   Y
 
             End If
             If Maze(x, y - 50) = False Then
-                ChildListX.Add(x)             'Up coordinate   X
-                ChildListY.Add(y - 50)        'Up coordinate   Y
+                Item(count).ChildX = (x)             'Up coordinate   X
+                Item(count).ChildY = (y - 50)        'Up coordinate   Y
 
             End If
 
         ElseIf y = 0 Then                             'If the current square is at the top border
             If Maze(x, y + 50) = False Then
-                ChildListX.Add(x)          'Down coordinate   X
-                ChildListY.Add(y + 50)     'Down coordinate   Y
+                Item(count).ChildX = (x)          'Down coordinate   X
+                Item(count).ChildY = (y + 50)     'Down coordinate   Y
 
             End If
             If Maze(x - 50, y) = False Then
-                ChildListX.Add(x - 50)         'Left coordinate X
-                ChildListY.Add(y)             'Left coordinate Y
+                Item(count).ChildX = (x - 50)         'Left coordinate X
+                Item(count).ChildY = (y)             'Left coordinate Y
 
             End If
             If Maze(x + 50, y) = False Then
-                ChildListX.Add(x + 50)      'Right coordinate  X
-                ChildListY.Add(y)           'Right coordinate   Y
+                Item(count).ChildX = (x + 50)      'Right coordinate  X
+                Item(count).ChildY = (y)           'Right coordinate   Y
 
             End If
 
         ElseIf x = 950 Then                           'If the current square is at the right border
             If Maze(x, y - 50) = False Then
-                ChildListX.Add(x)          'Up coordinate    X
-                ChildListY.Add(y - 50)     'Up coordinate   Y
+                Item(count).ChildX = (x)          'Up coordinate    X
+                Item(count).ChildY = (y - 50)     'Up coordinate   Y
 
             End If
             If Maze(x, y + 50) = False Then
-                ChildListX.Add(x)          'Down coordinate X
-                ChildListY.Add(y + 50)      'Down coordinate Y
+                Item(count).ChildX = (x)          'Down coordinate X
+                Item(count).ChildY = (y + 50)      'Down coordinate Y
 
             End If
             If Maze(x - 50, y) = False Then
-                ChildListX.Add(x - 50)      'Left coordinate   X
-                ChildListY.Add(y)          'Left coordinate   Y
+                Item(count).ChildX = x - 50      'Left coordinate   X
+                Item(count).ChildY = y          'Left coordinate   Y
 
             End If
 
         ElseIf y = 950 Then                           'If the current square is at the bottom border
             If Maze(x, y - 50) = False Then
-                ChildListX.Add(x)           'Up coordinate    X
-                ChildListY.Add(y - 50)      'Up coordinate   Y
+                Item(count).ChildX = x           'Up coordinate    X
+                Item(count).ChildY = y - 50      'Up coordinate   Y
 
             End If
             If Maze(x + 50, y) = False Then
-                ChildListX.Add(x + 50)      'Right coordinate  X
-                ChildListY.Add(y)         'Right coordinate   Y
+                Item(count).ChildX = x + 50      'Right coordinate  X
+                Item(count).ChildY = y         'Right coordinate   Y
 
             End If
             If Maze(x - 50, y) = False Then
-                ChildListX.Add(x - 50)      'Left coordinate   X
-                ChildListY.Add(y)           'Left coordinate   Y
+                Item(count).ChildX = x - 50      'Left coordinate   X
+                Item(count).ChildY = y           'Left coordinate   Y
 
             End If
 
         Else                'anywhere else in the square
             If Maze(x, y - 50) = False Then
-                ChildListX.Add(x)           'Up coordinate    X
-                ChildListY.Add(y - 50)    'Up coordinate   Y
+                Item(count).ChildX = x           'Up coordinate    X
+                Item(count).ChildY = y - 50    'Up coordinate   Y
 
             End If
             If Maze(x + 50, y) = False Then
-                ChildListX.Add(x + 50)      'Right coordinate  X
-                ChildListY.Add(y)           'Right coordinate   Y
+                Item(count).ChildX = x + 50      'Right coordinate  X
+                Item(count).ChildY = y           'Right coordinate   Y
 
             End If
             If Maze(x - 50, y) = False Then
-                ChildListX.Add(x - 50)     'Left coordinate   X
-                ChildListY.Add(y)          'Left coordinate   Y
+                Item(count).ChildX = x - 50     'Left coordinate   X
+                Item(count).ChildY = y          'Left coordinate   Y
 
             End If
             If Maze(x, y + 50) = False Then
-                ChildListX.Add(x)        'Down coordinate X
-                ChildListY.Add(y + 50)      'Down coordinate Y
+                Item(count).ChildX = x        'Down coordinate X
+                Item(count).ChildY = y + 50      'Down coordinate Y
 
             End If
 
         End If
 
     End Function
+
+
+
+
+
 
 End Module
