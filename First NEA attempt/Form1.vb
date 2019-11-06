@@ -596,6 +596,8 @@ Module module1
     Public Class Node
         Public ParentX As Integer
         Public ParentY As Integer
+        Public PresentX As Integer
+        Public PresentY As Integer
         Public ChildX() As Integer
         Public ChildY() As Integer
         Public f As Integer         'total cost of node  = g+h
@@ -647,7 +649,7 @@ Module module1
 
     Function MakeChoice(ByVal PrevLength As Integer)
 
-        For c = PrevLength To Item(3).ChildX.Length
+        For c = PrevLength To Item(count).ChildX.Length
 
             For a = 0 To Item(c).ChildX.Length - 1
                 If Item(c).ChildX(a) = 950 And Item(c).ChildY(a) = 950 Then
@@ -655,7 +657,7 @@ Module module1
                 End If
             Next
 
-            Item(c).g = Item(c).ParentX
+
 
 
 
@@ -668,7 +670,6 @@ Module module1
 
 
     End Function
-
 
     Function CheckInClosed()
         For a = 0 To ClosedListX.Count
@@ -680,8 +681,6 @@ Module module1
         Next
     End Function
 
-
-
     Function Child(ByVal x As Integer, ByVal y As Integer)
 
         If x = 0 And y = 0 Then                       'Top left corner
@@ -690,502 +689,654 @@ Module module1
                 Item(count).ChildY(0) = (y + 50)      'Down coordinate   Y
                 Item(count + 1).ParentX = x
                 Item(count + 1).ParentY = y
+                Item(count + 1).PresentX = x
+                Item(count + 1).PresentY = y + 50
             End If
             If Maze(x + 50, y) = False Then
                 Item(count).ChildX(1) = x + 50      'Right coordinate    X
                 Item(count).ChildY(1) = (y)         'Right coordinate   Y
                 Item(count + 2).ParentX = x
                 Item(count + 2).ParentY = y
+                Item(count + 2).PresentX = x + 50
+                Item(count + 2).PresentY = y
             End If
-            count += 1
+            count += 3
         ElseIf x = 0 And y = 950 Then                 'Bottom left corner
             If Maze(x, y - 50) = False Then
                 Item(count).ChildX(0) = x          'Up coordinate    X
                 Item(count).ChildY(0) = (y - 50)     'Up coordinate   Y
                 Item(count + 1).ParentX = x
                 Item(count + 1).ParentY = y
+                Item(count + 1).PresentX = x
+                Item(count + 1).PresentY = y - 50
             End If
             If Maze(x + 50, y) = False Then
                 Item(count).ChildX(1) = x + 50      'Right coordinate  X
                 Item(count).ChildY(1) = (y)           'Right coordinate Y
                 Item(count + 2).ParentX = x
                 Item(count + 2).ParentY = y
+                Item(count + 2).PresentX = x + 50
+                Item(count + 2).PresentY = y
             End If
-            count += 1
+            count += 3
         ElseIf x = 950 And y = 0 Then                 'Top right corner
             If Maze(x, y + 50) = False Then
                 Item(count).ChildX(0) = x           'Down coordinate    X
                 Item(count).ChildY(0) = (y + 50)     'Down coordinate   Y
                 Item(count + 1).ParentX = x
                 Item(count + 1).ParentY = y
+                Item(count + 1).PresentX = x
+                Item(count + 1).PresentY = y + 50
             End If
             If Maze(x - 50, y) = False Then
                 Item(count).ChildX(1) = (x - 50)    'Left coordinate    X
                 Item(count).ChildY(1) = (y)          'Left coordinate   Y
                 Item(count + 2).ParentX = x
                 Item(count + 2).ParentY = y
+                Item(count + 2).PresentX = x - 50
+                Item(count + 2).PresentY = y
             End If
-            count += 1
+            count += 3
         ElseIf x = 950 And y = 950 Then               'Bottom right corner
             If Maze(x, y - 50) = False Then
                 Item(count).ChildX(0) = (x)        'Up coordinate    X
                 Item(count).ChildY(0) = (y - 50)     'Up coordinate   Y
                 Item(count + 1).ParentX = x
                 Item(count + 1).ParentY = y
+                Item(count + 1).PresentX = x
+                Item(count + 1).PresentY = y - 50
             End If
             If Maze(x - 50, y) = False Then
                 Item(count).ChildX(1) = (x - 50)      'Left coordinate   X
                 Item(count).ChildY(1) = (y)         'Left coordinate   Y
                 Item(count + 2).ParentX = x
                 Item(count + 2).ParentY = y
+                Item(count + 2).PresentX = x - 50
+                Item(count + 2).PresentY = y
             End If
-            count += 1
+            count += 3
         ElseIf x = 0 And y = 50 Then                      'special case
             If Maze(x, y + 50) = False Then
                 Item(count).ChildX(0) = (x)           'Down coordinate    X
                 Item(count).ChildY(0) = (y + 50)      'Down coordinate   Y
                 Item(count + 1).ParentX = x
                 Item(count + 1).ParentY = y
+                Item(count + 1).PresentX = x
+                Item(count + 1).PresentY = y + 50
             End If
             If Maze(x + 50, y) = False Then
                 Item(count).ChildX(1) = (x + 50)     'Right coordinate    X
                 Item(count).ChildY(1) = (y)          'Right coordinate   Y
                 Item(count + 2).ParentX = x
                 Item(count + 2).ParentY = y
+                Item(count + 2).PresentX = x + 50
+                Item(count + 2).PresentY = y
             End If
             If Maze(x, y - 50) = False Then
                 Item(count).ChildX(2) = (x)             'Up coordinate   X
                 Item(count).ChildY(2) = (y - 50)        'Up coordinate   Y
                 Item(count + 3).ParentX = x
                 Item(count + 3).ParentY = y
+                Item(count + 3).PresentX = x
+                Item(count + 3).PresentY = y - 50
             End If
-            count += 1
+            count += 4
         ElseIf x = 0 And y = 900 Then           'special case
             If Maze(x, y + 50) = False Then
                 Item(count).ChildX(0) = (x)           'Down coordinate    X
                 Item(count).ChildY(0) = (y + 50)      'Down coordinate   Y
                 Item(count + 1).ParentX = x
                 Item(count + 1).ParentY = y
+                Item(count + 1).PresentX = x
+                Item(count + 1).PresentY = y + 50
             End If
             If Maze(x + 50, y) = False Then
                 Item(count).ChildX(1) = (x + 50)     'Right coordinate    X
                 Item(count).ChildY(1) = (y)          'Right coordinate   Y
                 Item(count + 2).ParentX = x
                 Item(count + 2).ParentY = y
+                Item(count + 2).PresentX = x + 50
+                Item(count + 2).PresentY = y
             End If
             If Maze(x, y - 50) = False Then
                 Item(count).ChildX(2) = (x)             'Up coordinate   X
                 Item(count).ChildY(2) = (y - 50)        'Up coordinate   Y
                 Item(count + 3).ParentX = x
                 Item(count + 3).ParentY = y
+                Item(count + 3).PresentX = x
+                Item(count + 3).PresentY = y - 50
             End If
-            count += 1
+            count += 4
         ElseIf x = 50 And y = 0 Then                       'special case
             If Maze(x, y + 50) = False Then
                 Item(count).ChildX(0) = (x)          'Down coordinate   X
                 Item(count).ChildY(0) = (y + 50)     'Down coordinate   Y
                 Item(count + 1).ParentX = x
                 Item(count + 1).ParentY = y
+                Item(count + 1).PresentX = x
+                Item(count + 1).PresentY = y + 50
             End If
             If Maze(x - 50, y) = False Then
                 Item(count).ChildX(1) = (x - 50)         'Left coordinate X
                 Item(count).ChildY(1) = (y)             'Left coordinate Y
                 Item(count + 2).ParentX = x
                 Item(count + 2).ParentY = y
+                Item(count + 2).PresentX = x - 50
+                Item(count + 2).PresentY = y
             End If
             If Maze(x + 50, y) = False Then
                 Item(count).ChildX(2) = (x + 50)      'Right coordinate  X
                 Item(count).ChildY(2) = (y)           'Right coordinate   Y
                 Item(count + 3).ParentX = x
                 Item(count + 3).ParentY = y
+                Item(count + 3).PresentX = x + 50
+                Item(count + 3).PresentY = y
             End If
-            count += 1
+            count += 4
         ElseIf x = 50 And y = 50 Then              'special case
             If Maze(x, y - 50) = False Then
                 Item(count).ChildX(0) = (x)           'Up coordinate    X
                 Item(count).ChildY(0) = (y - 50)    'Up coordinate   Y
                 Item(count + 1).ParentX = x
                 Item(count + 1).ParentY = y
+                Item(count + 1).PresentX = x
+                Item(count + 1).PresentY = y - 50
             End If
             If Maze(x + 50, y) = False Then
                 Item(count).ChildX(1) = (x + 50)      'Right coordinate  X
                 Item(count).ChildY(1) = (y)           'Right coordinate   Y
                 Item(count + 2).ParentX = x
                 Item(count + 2).ParentY = y
+                Item(count + 2).PresentX = x + 50
+                Item(count + 2).PresentY = y
             End If
             If Maze(x - 50, y) = False Then
                 Item(count).ChildX(2) = (x - 50)     'Left coordinate   X
                 Item(count).ChildY(2) = (y)          'Left coordinate   Y
                 Item(count + 3).ParentX = x
                 Item(count + 3).ParentY = y
+                Item(count + 3).PresentX = x - 50
+                Item(count + 3).PresentY = y
             End If
             If Maze(x, y + 50) = False Then
                 Item(count).ChildX(3) = (x)        'Down coordinate X
                 Item(count).ChildY(3) = (y + 50)      'Down coordinate Y
                 Item(count + 4).ParentX = x
                 Item(count + 4).ParentY = y
+                Item(count + 4).PresentX = x
+                Item(count + 4).PresentY = y + 50
             End If
-            count += 1
+            count += 5
         ElseIf x = 50 And 99 < y And y < 851 Then                     'special case
             If Maze(x, y - 50) = False Then
                 Item(count).ChildX(0) = (x)           'Up coordinat    X
                 Item(count).ChildY(0) = (y - 50)    'Up coordinate   Y
                 Item(count + 1).ParentX = x
                 Item(count + 1).ParentY = y
+                Item(count + 1).PresentX = x
+                Item(count + 1).PresentY = y - 50
             End If
             If Maze(x + 50, y) = False Then
                 Item(count).ChildX(1) = (x + 50)      'Right coordinate  X
                 Item(count).ChildY(1) = (y)           'Right coordinate   Y
                 Item(count + 2).ParentX = x
                 Item(count + 2).ParentY = y
+                Item(count + 2).PresentX = x + 50
+                Item(count + 2).PresentY = y
             End If
             If Maze(x - 50, y) = False Then
                 Item(count).ChildX(2) = (x - 50)     'Left coordinate   X
                 Item(count).ChildY(2) = (y)          'Left coordinate   Y
                 Item(count + 3).ParentX = x
                 Item(count + 3).ParentY = y
+                Item(count + 3).PresentX = x - 50
+                Item(count + 3).PresentY = y
             End If
             If Maze(x, y + 50) = False Then
                 Item(count).ChildX(3) = x        'own coordinate X
                 Item(count).ChildY(3) = (y + 50)      'Down coordinate Y
                 Item(count + 4).ParentX = x
                 Item(count + 4).ParentY = y
+                Item(count + 4).PresentX = x
+                Item(count + 4).PresentY = y + 50
             End If
-            count += 1
+            count += 5
         ElseIf x = 50 And y = 900 Then           'special case
             If Maze(x, y - 50) = False Then
                 Item(count).ChildX(0) = (x)           'Up coordinate    X
                 Item(count).ChildY(0) = (y - 50)    'Up coordinate   Y
                 Item(count + 1).ParentX = x
                 Item(count + 1).ParentY = y
+                Item(count + 1).PresentX = x
+                Item(count + 1).PresentY = y - 50
             End If
             If Maze(x + 50, y) = False Then
                 Item(count).ChildX(1) = (x + 50)      'Right coordinate  X
                 Item(count).ChildY(1) = (y)           'Right coordinate   Y
                 Item(count + 2).ParentX = x
                 Item(count + 2).ParentY = y
+                Item(count + 2).PresentX = x + 50
+                Item(count + 2).PresentY = y
             End If
             If Maze(x - 50, y) = False Then
                 Item(count).ChildX(2) = (x - 50)     'Left coordinate   X
                 Item(count).ChildY(2) = (y)          'Left coordinate   Y
                 Item(count + 3).ParentX = x
                 Item(count + 3).ParentY = y
+                Item(count + 3).PresentX = x - 50
+                Item(count + 3).PresentY = y
             End If
             If Maze(x, y + 50) = False Then
                 Item(count).ChildX(3) = (x)        'Down coordinate X
                 Item(count).ChildY(3) = (y + 50)      'Down coordinate Y
                 Item(count + 4).ParentX = x
                 Item(count + 4).ParentY = y
+                Item(count + 4).PresentX = x
+                Item(count + 4).PresentY = y + 50
             End If
-            count += 1
+            count += 5
         ElseIf x = 50 And y = 950 Then          'special case
             If Maze(x, y - 50) = False Then
                 Item(count).ChildX(0) = (x)           'Up coordinate    X
                 Item(count).ChildY(0) = (y - 50)      'Up coordinate   Y
                 Item(count + 1).ParentX = x
                 Item(count + 1).ParentY = y
+                Item(count + 1).PresentX = x
+                Item(count + 1).PresentY = y - 50
             End If
             If Maze(x + 50, y) = False Then
                 Item(count).ChildX(1) = (x + 50)      'Right coordinate  X
                 Item(count).ChildY(1) = (y)         'Right coordinate   Y
                 Item(count + 2).ParentX = x
                 Item(count + 2).ParentY = y
+                Item(count + 2).PresentX = x + 50
+                Item(count + 2).PresentY = y
             End If
             If Maze(x - 50, y) = False Then
                 Item(count).ChildX(2) = (x - 50)      'Left coordinate   X
                 Item(count).ChildY(2) = (y)           'Left coordinate   Y
                 Item(count + 3).ParentX = x
                 Item(count + 3).ParentY = y
+                Item(count + 3).PresentX = x - 50
+                Item(count + 3).PresentY = y
             End If
-            count += 1
+            count += 4
         ElseIf 99 < x And x < 851 And y = 50 Then                 'special case
             If Maze(x, y - 50) = False Then
                 Item(count).ChildX(0) = (x)           'Up coordinate    X
                 Item(count).ChildY(0) = (y - 50)    'Up coordinate   Y
                 Item(count + 1).ParentX = x
                 Item(count + 1).ParentY = y
+                Item(count + 1).PresentX = x
+                Item(count + 1).PresentY = y - 50
             End If
             If Maze(x + 50, y) = False Then
                 Item(count).ChildX(1) = (x + 50)      'Right coordinate  X
                 Item(count).ChildY(1) = (y)           'Right coordinate   Y
                 Item(count + 2).ParentX = x
                 Item(count + 2).ParentY = y
+                Item(count + 2).PresentX = x + 50
+                Item(count + 2).PresentY = y
             End If
             If Maze(x - 50, y) = False Then
                 Item(count).ChildX(2) = (x - 50)     'Left coordinate   X
                 Item(count).ChildY(2) = (y)          'Left coordinate   Y
                 Item(count + 3).ParentX = x
                 Item(count + 3).ParentY = y
+                Item(count + 3).PresentX = x - 50
+                Item(count + 3).PresentY = y
             End If
             If Maze(x, y + 50) = False Then
                 Item(count).ChildX(3) = (x)        'Down coordinate X
                 Item(count).ChildY(3) = (y + 50)      'Down coordinate Y
                 Item(count + 4).ParentX = x
                 Item(count + 4).ParentY = y
+                Item(count + 4).PresentX = x
+                Item(count + 4).PresentY = y + 50
             End If
-            count += 1
+            count += 5
         ElseIf 99 < x And x < 851 And y = 900 Then         'special case
             If Maze(x, y - 50) = False Then
                 Item(count).ChildX(0) = (x)           'Up coordinate    X
                 Item(count).ChildY(0) = (y - 50)    'Up coordinate   Y
                 Item(count + 1).ParentX = x
                 Item(count + 1).ParentY = y
+                Item(count + 1).PresentX = x
+                Item(count + 1).PresentY = y - 50
             End If
             If Maze(x + 50, y) = False Then
                 Item(count).ChildX(1) = (x + 50)      'Right coordinate  X
                 Item(count).ChildY(1) = (y)           'Right coordinate   Y
                 Item(count + 2).ParentX = x
                 Item(count + 2).ParentY = y
+                Item(count + 2).PresentX = x + 50
+                Item(count + 2).PresentY = y
             End If
             If Maze(x - 50, y) = False Then
                 Item(count).ChildX(2) = (x - 50)     'Left coordinate   X
                 Item(count).ChildY(2) = (y)          'Left coordinate   Y
                 Item(count + 3).ParentX = x
                 Item(count + 3).ParentY = y
+                Item(count + 3).PresentX = x - 50
+                Item(count + 3).PresentY = y
             End If
             If Maze(x, y + 50) = False Then
                 Item(count).ChildX(3) = (x)        'Down coordinate X
                 Item(count).ChildY(3) = (y + 50)      'Down coordinate Y
                 Item(count + 4).ParentX = x
                 Item(count + 4).ParentY = y
+                Item(count + 4).PresentX = x
+                Item(count + 4).PresentY = y + 50
             End If
-            count += 1
+            count += 5
         ElseIf x = 900 And y = 0 Then         'special case
             If Maze(x + 50, y) = False Then
                 Item(count).ChildX(0) = (x + 50)      'Right coordinate  X
                 Item(count).ChildY(0) = (y)           'Right coordinate   Y
                 Item(count + 1).ParentX = x
                 Item(count + 1).ParentY = y
+                Item(count + 1).PresentX = x + 50
+                Item(count + 1).PresentY = y
             End If
             If Maze(x - 50, y) = False Then
                 Item(count).ChildX(1) = (x - 50)     'Left coordinate   X
                 Item(count).ChildY(1) = (y)          'Left coordinate   Y
                 Item(count + 2).ParentX = x
                 Item(count + 2).ParentY = y
+                Item(count + 2).PresentX = x - 50
+                Item(count + 2).PresentY = y
             End If
             If Maze(x, y + 50) = False Then
                 Item(count).ChildX(2) = (x)        'Down coordinate X
                 Item(count).ChildY(2) = (y + 50)      'Down coordinate Y
                 Item(count + 3).ParentX = x
                 Item(count + 3).ParentY = y
+                Item(count + 3).PresentX = x
+                Item(count + 3).PresentY = y + 50
             End If
-            count += 1
+            count += 4
         ElseIf x = 900 And y = 50 Then              'special case
             If Maze(x, y - 50) = False Then
                 Item(count).ChildX(0) = (x)           'Up coordinate    X
                 Item(count).ChildY(0) = (y - 50)    'Up coordinate   Y
                 Item(count + 1).ParentX = x
                 Item(count + 1).ParentY = y
+                Item(count + 1).PresentX = x
+                Item(count + 1).PresentY = y - 50
             End If
             If Maze(x + 50, y) = False Then
                 Item(count).ChildX(1) = (x + 50)      'Right coordinate  X
                 Item(count).ChildY(1) = (y)           'Right coordinate   Y
                 Item(count + 2).ParentX = x
                 Item(count + 2).ParentY = y
+                Item(count + 2).PresentX = x + 50
+                Item(count + 2).PresentY = y
             End If
             If Maze(x - 50, y) = False Then
                 Item(count).ChildX(2) = (x - 50)     'Left coordinate   X
                 Item(count).ChildY(2) = (y)          'Left coordinate   Y
                 Item(count + 3).ParentX = x
                 Item(count + 3).ParentY = y
+                Item(count + 3).PresentX = x - 50
+                Item(count + 3).PresentY = y
             End If
             If Maze(x, y + 50) = False Then
                 Item(count).ChildX(3) = (x)        'Down coordinate X
                 Item(count).ChildY(3) = (y + 50)      'Down coordinate Y
                 Item(count + 4).ParentX = x
                 Item(count + 4).ParentY = y
+                Item(count + 4).PresentX = x
+                Item(count + 4).PresentY = y + 50
             End If
-            count += 1
+            count += 5
         ElseIf x = 900 And 99 < y And y < 851 Then            'special case
             If Maze(x, y - 50) = False Then
                 Item(count).ChildX(0) = (x)           'Up coordinate    X
                 Item(count).ChildY(0) = (y - 50)    'Up coordinate   Y
                 Item(count + 1).ParentX = x
                 Item(count + 1).ParentY = y
+                Item(count + 1).PresentX = x
+                Item(count + 1).PresentY = y - 50
             End If
             If Maze(x + 50, y) = False Then
                 Item(count).ChildX(1) = (x + 50)      'Right coordinate  X
                 Item(count).ChildY(1) = (y)           'Right coordinate   Y
                 Item(count + 2).ParentX = x
                 Item(count + 2).ParentY = y
+                Item(count + 2).PresentX = x + 50
+                Item(count + 2).PresentY = y
             End If
             If Maze(x - 50, y) = False Then
                 Item(count).ChildX(2) = (x - 50)     'Left coordinate   X
                 Item(count).ChildY(2) = (y)          'Left coordinate   Y
                 Item(count + 3).ParentX = x
                 Item(count + 3).ParentY = y
+                Item(count + 3).PresentX = x - 50
+                Item(count + 3).PresentY = y
             End If
             If Maze(x, y + 50) = False Then
                 Item(count).ChildX(3) = x        'Down coordinate X
                 Item(count).ChildY(3) = (y + 50)      'Down coordinate Y
                 Item(count + 4).ParentX = x
                 Item(count + 4).ParentY = y
+                Item(count + 4).PresentX = x
+                Item(count + 4).PresentY = y + 50
             End If
-            count += 1
+            count += 5
         ElseIf x = 900 And y = 900 Then                     'special case
             If Maze(x, y - 50) = False Then
                 Item(count).ChildX(0) = (x)           'Up coordinate    X
                 Item(count).ChildY(0) = (y - 50)    'Up coordinate   Y
                 Item(count + 1).ParentX = x
                 Item(count + 1).ParentY = y
+                Item(count + 1).PresentX = x
+                Item(count + 1).PresentY = y - 50
             End If
             If Maze(x + 50, y) = False Then
                 Item(count).ChildX(1) = (x + 50)      'Right coordinate  X
                 Item(count).ChildY(1) = (y)           'Right coordinate   Y
                 Item(count + 2).ParentX = x
                 Item(count + 2).ParentY = y
+                Item(count + 2).PresentX = x + 50
+                Item(count + 2).PresentY = y
             End If
             If Maze(x - 50, y) = False Then
                 Item(count).ChildX(2) = (x - 50)     'Left coordinate   X
                 Item(count).ChildY(2) = y         'Left coordinate   Y
                 Item(count + 3).ParentX = x
                 Item(count + 3).ParentY = y
+                Item(count + 3).PresentX = x - 50
+                Item(count + 3).PresentY = y
             End If
             If Maze(x, y + 50) = False Then
                 Item(count).ChildX(3) = (x)        'Down coordinate X
                 Item(count).ChildY(3) = (y + 50)      'Down coordinate Y
                 Item(count + 4).ParentX = x
                 Item(count + 4).ParentY = y
+                Item(count + 4).PresentX = x
+                Item(count + 4).PresentY = y + 50
             End If
-            count += 1
+            count += 5
         ElseIf x = 900 And y = 950 Then                'special case
             If Maze(x, y - 50) = False Then
                 Item(count).ChildX(0) = (x)           'Up coordinate    X
                 Item(count).ChildY(0) = (y - 50)    'Up coordinate   Y
                 Item(count + 1).ParentX = x
                 Item(count + 1).ParentY = y
+                Item(count + 1).PresentX = x
+                Item(count + 1).PresentY = y - 50
             End If
             If Maze(x + 50, y) = False Then
                 Item(count).ChildX(1) = (x + 50)      'Right coordinate  X
                 Item(count).ChildY(1) = (y)           'Right coordinate   Y
                 Item(count + 2).ParentX = x
                 Item(count + 2).ParentY = y
+                Item(count + 2).PresentX = x + 50
+                Item(count + 2).PresentY = y
             End If
             If Maze(x - 50, y) = False Then
                 Item(count).ChildX(2) = (x - 50)     'Left coordinate   X
                 Item(count).ChildY(2) = (y)          'Left coordinate   Y
                 Item(count + 3).ParentX = x
                 Item(count + 3).ParentY = y
+                Item(count + 3).PresentX = x - 50
+                Item(count + 3).PresentY = y
             End If
-            count += 1
+            count += 4
         ElseIf x = 950 And y = 50 Then                'special case
             If Maze(x, y - 50) = False Then
                 Item(count).ChildX(0) = (x)           'Up coordinate    X
                 Item(count).ChildY(0) = (y - 50)    'Up coordinate   Y
                 Item(count + 1).ParentX = x
                 Item(count + 1).ParentY = y
+                Item(count + 1).PresentX = x
+                Item(count + 1).PresentY = y - 50
             End If
             If Maze(x - 50, y) = False Then
                 Item(count).ChildX(1) = (x - 50)     'Left coordinate   X
                 Item(count).ChildY(1) = (y)          'Left coordinate   Y
                 Item(count + 2).ParentX = x
                 Item(count + 2).ParentY = y
+                Item(count + 2).PresentX = x - 50
+                Item(count + 2).PresentY = y
             End If
             If Maze(x, y + 50) = False Then
                 Item(count).ChildX(2) = (x)        'Down coordinate X
                 Item(count).ChildY(2) = (y + 50)      'Down coordinate Y
                 Item(count + 3).ParentX = x
                 Item(count + 3).ParentY = y
+                Item(count + 3).PresentX = x
+                Item(count + 3).PresentY = y + 50
             End If
-            count += 1
+            count += 4
         ElseIf x = 950 And y = 900 Then             'special case
             If Maze(x, y - 50) = False Then
                 Item(count).ChildX(0) = x           'Up coordinate    X
                 Item(count).ChildY(0) = (y - 50)    'Up coordinate   Y
                 Item(count + 1).ParentX = x
                 Item(count + 1).ParentY = y
+                Item(count + 1).PresentX = x
+                Item(count + 1).PresentY = y - 50
             End If
             If Maze(x - 50, y) = False Then
                 Item(count).ChildX(1) = (x - 50)     'Left coordinate   X
                 Item(count).ChildY(1) = (y)          'Left coordinate   Y
                 Item(count + 2).ParentX = x
                 Item(count + 2).ParentY = y
+                Item(count + 2).PresentX = x - 50
+                Item(count + 2).PresentY = y
             End If
             If Maze(x, y + 50) = False Then
                 Item(count).ChildX(2) = (x)        'Down coordinate X
                 Item(count).ChildY(2) = (y + 50)      'Down coordinate Y
                 Item(count + 3).ParentX = x
                 Item(count + 3).ParentY = y
+                Item(count + 3).PresentX = x
+                Item(count + 3).PresentY = y + 50
             End If
-            count += 1
+            count += 4
         ElseIf x = 0 Then                             'If the current square is at the left border
             If Maze(x, y + 50) = False Then
                 Item(count).ChildX(0) = (x)           'Down coordinate    X
                 Item(count).ChildY(0) = (y + 50)      'Down coordinate   Y
                 Item(count + 1).ParentX = x
                 Item(count + 1).ParentY = y
+                Item(count + 1).PresentX = x
+                Item(count + 1).PresentY = y + 50
             End If
             If Maze(x + 50, y) = False Then
                 Item(count).ChildX(1) = (x + 50)     'Right coordinate    X
                 Item(count).ChildY(1) = (y)          'Right coordinate   Y
                 Item(count + 2).ParentX = x
                 Item(count + 2).ParentY = y
+                Item(count + 2).PresentX = x + 50
+                Item(count + 2).PresentY = y
             End If
             If Maze(x, y - 50) = False Then
                 Item(count).ChildX(2) = (x)             'Up coordinate   X
                 Item(count).ChildY(2) = (y - 50)        'Up coordinate   Y
                 Item(count + 3).ParentX = x
                 Item(count + 3).ParentY = y
+                Item(count + 3).PresentX = x
+                Item(count + 3).PresentY = y - 50
             End If
-            count += 1
+            count += 4
         ElseIf y = 0 Then                             'If the current square is at the top border
             If Maze(x, y + 50) = False Then
                 Item(count).ChildX(0) = (x)          'Down coordinate   X
                 Item(count).ChildY(0) = (y + 50)     'Down coordinate   Y
                 Item(count + 1).ParentX = x
                 Item(count + 1).ParentY = y
+                Item(count + 1).PresentX = x
+                Item(count + 1).PresentY = y + 50
             End If
             If Maze(x - 50, y) = False Then
                 Item(count).ChildX(1) = (x - 50)         'Left coordinate X
                 Item(count).ChildY(1) = (y)             'Left coordinate Y
                 Item(count + 2).ParentX = x
                 Item(count + 2).ParentY = y
+                Item(count + 2).PresentX = x - 50
+                Item(count + 2).PresentY = y
             End If
             If Maze(x + 50, y) = False Then
                 Item(count).ChildX(2) = (x + 50)      'Right coordinate  X
                 Item(count).ChildY(2) = (y)           'Right coordinate   Y
                 Item(count + 3).ParentX = x
                 Item(count + 3).ParentY = y
+                Item(count + 3).PresentX = x + 50
+                Item(count + 3).PresentY = y
             End If
-            count += 1
+            count += 4
         ElseIf x = 950 Then                           'If the current square is at the right border
             If Maze(x, y - 50) = False Then
                 Item(count).ChildX(0) = (x)          'Up coordinate    X
                 Item(count).ChildY(0) = (y - 50)     'Up coordinate   Y
                 Item(count + 1).ParentX = x
                 Item(count + 1).ParentY = y
+                Item(count + 1).PresentX = x
+                Item(count + 1).PresentY = y - 50
             End If
             If Maze(x, y + 50) = False Then
                 Item(count).ChildX(1) = (x)          'Down coordinate X
                 Item(count).ChildY(1) = (y + 50)      'Down coordinate Y
                 Item(count + 2).ParentX = x
                 Item(count + 2).ParentY = y
+                Item(count + 2).PresentX = x
+                Item(count + 2).PresentY = y + 50
             End If
             If Maze(x - 50, y) = False Then
                 Item(count).ChildX(2) = x - 50      'Left coordinate   X
                 Item(count).ChildY(2) = y          'Left coordinate   Y
                 Item(count + 3).ParentX = x
                 Item(count + 3).ParentY = y
+                Item(count + 3).PresentX = x - 50
+                Item(count + 3).PresentY = y
             End If
-            count += 1
+            count += 4
         ElseIf y = 950 Then                           'If the current square is at the bottom border
             If Maze(x, y - 50) = False Then
                 Item(count).ChildX(0) = x           'Up coordinate    X
                 Item(count).ChildY(0) = y - 50      'Up coordinate   Y
                 Item(count + 1).ParentX = x
                 Item(count + 1).ParentY = y
+                Item(count + 1).PresentX = x
+                Item(count + 1).PresentY = y - 50
             End If
             If Maze(x + 50, y) = False Then
                 Item(count).ChildX(1) = x + 50      'Right coordinate  X
                 Item(count).ChildY(1) = y         'Right coordinate   Y
                 Item(count + 2).ParentX = x
                 Item(count + 2).ParentY = y
+                Item(count + 2).PresentX = x + 50
+                Item(count + 2).PresentY = y
             End If
             If Maze(x - 50, y) = False Then
                 Item(count).ChildX(2) = x - 50      'Left coordinate   X
                 Item(count).ChildY(2) = y           'Left coordinate   Y
                 Item(count + 3).ParentX = x
                 Item(count + 3).ParentY = y
+                Item(count + 3).PresentX = x - 50
+                Item(count + 3).PresentY = y
             End If
             count += 1
         Else                'anywhere else in the square
@@ -1194,26 +1345,34 @@ Module module1
                 Item(count).ChildY(0) = y - 50    'Up coordinate   Y
                 Item(count + 1).ParentX = x
                 Item(count + 1).ParentY = y
+                Item(count + 1).PresentX = x
+                Item(count + 1).PresentY = y - 50
             End If
             If Maze(x + 50, y) = False Then
                 Item(count).ChildX(1) = x + 50      'Right coordinate  X
                 Item(count).ChildY(1) = y           'Right coordinate   Y
                 Item(count + 2).ParentX = x
                 Item(count + 2).ParentY = y
+                Item(count + 2).PresentX = x + 50
+                Item(count + 2).PresentY = y
             End If
             If Maze(x - 50, y) = False Then
                 Item(count).ChildX(2) = x - 50     'Left coordinate   X
                 Item(count).ChildY(2) = y          'Left coordinate   Y
                 Item(count + 3).ParentX = x
                 Item(count + 3).ParentY = y
+                Item(count + 3).PresentX = x - 50
+                Item(count + 3).PresentY = y
             End If
             If Maze(x, y + 50) = False Then
                 Item(count).ChildX(3) = x        'Down coordinate X
                 Item(count).ChildY(3) = y + 50      'Down coordinate Y
                 Item(count + 4).ParentX = x
                 Item(count + 4).ParentY = y
+                Item(count + 4).PresentX = x
+                Item(count + 4).PresentY = y + 50
             End If
-            count += 1
+            count += 5
         End If
 
     End Function
