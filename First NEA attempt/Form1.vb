@@ -664,7 +664,6 @@ Module module1
         Do
             FindCount()
         Loop While CheckStart() = False
-        Console.Beep(800, 2000)
 
     End Function
 
