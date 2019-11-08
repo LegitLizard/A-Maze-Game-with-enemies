@@ -25,16 +25,16 @@
         Next
 
     End Function
-
-    Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        Dim SolveButton As New Button()
+    Public WithEvents SolveButton As Button
+    Public Function Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        SolveButton = New Button()
         SolveButton.Text = "Press to Solve Maze"
         SolveButton.Location = New Point(1020, 500)
         SolveButton.Size = New Size(150, 50)
         Controls.Add(SolveButton)
-    End Sub
+    End Function
 
-    Private Sub SolveButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+    Private Sub SolveButton_click(ByVal sender As Object, ByVal e As EventArgs) Handles SolveButton.Click
         AStar()
     End Sub
 
@@ -604,6 +604,8 @@ Module module1
     Dim CurrentY As Integer = 0
     Dim count As Integer = 0        'holds the highest item number
     Public Item() As Node
+    Dim PathX As New List(Of Integer)
+    Dim PathY As New List(Of Integer)
 
     Public Class Node
         Public ParentX As Integer
@@ -653,10 +655,26 @@ Module module1
 
             Child(CurrentX, CurrentY)
 
-        Loop While OpenListX.Count <> 0 Or CheckInClosed(CurrentX, CurrentY) = True
+        Loop While OpenListX.Count <> 0 Or CheckInClosed(CurrentX, CurrentY) = True Or CurrentX <> 950 And CurrentY <> 950
+
+        Do
+            For a = count To 0 Step -1
+
+            Next
 
 
+        Loop While CheckStart = False
 
+
+    End Function
+
+    Function CheckStart()
+        For a = 0 To PathX.Count - 1
+            If PathX(a) = 0 And PathY(a) = 0 Then
+                Return True
+            End If
+        Next
+        Return False
 
     End Function
 
@@ -758,29 +776,7 @@ Module module1
             End If
             count += 3
         ElseIf x = 950 And y = 950 Then               'Bottom right corner
-            If Maze(x, y - 50) = False And CheckInOpen(x, y + 50) = False Then
-                Item(count).ChildX(0) = (x)        'Up coordinate    X
-                Item(count).ChildY(0) = (y - 50)     'Up coordinate   Y
-                Item(count + 1).ParentX = x
-                Item(count + 1).ParentY = y
-                Item(count + 1).PresentX = x
-                Item(count + 1).PresentY = y - 50
-                Item(count + 1).g = Item(count).g + 1
-                Item(count + 1).h = (950 - Item(count + 1).PresentX) + (950 - Item(count + 1).PresentY)
-                Item(count + 1).f = Item(count + 1).g + Item(count + 1).h
-            End If
-            If Maze(x - 50, y) = False And CheckInOpen(x, y + 50) = False Then
-                Item(count).ChildX(1) = (x - 50)      'Left coordinate   X
-                Item(count).ChildY(1) = (y)         'Left coordinate   Y
-                Item(count + 2).ParentX = x
-                Item(count + 2).ParentY = y
-                Item(count + 2).PresentX = x - 50
-                Item(count + 2).PresentY = y
-                Item(count + 2).g = Item(count).g + 1
-                Item(count + 2).h = (950 - Item(count + 2).PresentX) + (950 - Item(count + 2).PresentY)
-                Item(count + 2).f = Item(count + 2).g + Item(count + 2).h
-            End If
-            count += 3
+            Return True
         ElseIf x = 0 And y = 50 Then                      'special case
             If Maze(x, y + 50) = False And CheckInOpen(x, y + 50) = False Then
                 Item(count).ChildX(0) = (x)           'Down coordinate    X
