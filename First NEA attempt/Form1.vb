@@ -1,4 +1,5 @@
 ﻿Public Class Form1
+    Public WithEvents SolveButton As Button
 
     Public Function CreatePicBoxes() Handles Me.Load
 
@@ -25,7 +26,7 @@
         Next
 
     End Function
-    Public WithEvents SolveButton As Button
+
     Public Function Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         SolveButton = New Button()
         SolveButton.Text = "Press to Solve Maze"
@@ -615,7 +616,7 @@ Module module1
         Public ChildX() As Integer
         Public ChildY() As Integer
         Public f As Integer         'total cost of node  = g+h
-        Public g As Integer         'distance from the start
+        Public g As Integer         'distance from the start following path
         Public h As Integer         'heuristic best guess
     End Class
 
@@ -657,14 +658,28 @@ Module module1
 
         Loop While OpenListX.Count <> 0 Or CheckInClosed(CurrentX, CurrentY) = True Or CurrentX <> 950 And CurrentY <> 950
 
+        CurrentX = 950
+        CurrentY = 950
+
         Do
-            For a = count To 0 Step -1
+            FindCount()
+        Loop While CheckStart() = False
+        Console.Beep(800, 2000)
 
+    End Function
+
+    Function FindCount()
+
+        For a = 0 To Item.Count
+            For b = 0 To Item(a).ChildX.Count
+                If Item(a).ChildX(b) = CurrentX And Item(a).ChildY(b) = CurrentY Then
+                    PathX.Add(Item(a).ChildX(b))
+                    PathY.Add(Item(a).ChildY(b))
+                    CurrentX = Item(a).PresentX
+                    CurrentY = Item(a).PresentY
+                End If
             Next
-
-
-        Loop While CheckStart = False
-
+        Next
 
     End Function
 
