@@ -37,6 +37,24 @@
 
     Private Sub SolveButton_click(ByVal sender As Object, ByVal e As EventArgs) Handles SolveButton.Click
         AStar()
+        PaintSolution()
+    End Sub
+
+    Public Sub PaintSolution() Handles Me.Load
+        Dim i As Integer = 1
+        For y = 0 To PathY.Count - 1
+            For x = 0 To PathX.Count - 1
+                Dim newPictureBox As New PictureBox
+                newPictureBox.Name = "PictureBox" & i
+                newPictureBox.Location = New Point(PathX(x), PathY(y))
+                newPictureBox.BorderStyle = BorderStyle.None
+                newPictureBox.Dock = DockStyle.None
+                newPictureBox.Visible = True
+                newPictureBox.BackColor = Color.Pink
+                Controls.Add(newPictureBox)
+                i += 1
+            Next
+        Next
     End Sub
 
 End Class
@@ -605,8 +623,9 @@ Module module1
     Dim CurrentY As Integer = 0
     Dim count As Integer = 0        'holds the highest item number
     Public Item() As Node
-    Dim PathX As New List(Of Integer)
-    Dim PathY As New List(Of Integer)
+    Public PathX As New List(Of Integer)
+    Public PathY As New List(Of Integer)
+    ReadOnly test As Node
 
     Public Class Node
         Public ParentX As Integer
@@ -624,6 +643,8 @@ Module module1
 
         OpenListX.Add(0)
         OpenListY.Add(0)
+
+
         Item(0).g = 0
         Item(0).h = CurrentX + CurrentY
         Item(0).f = Item(0).h + Item(0).g
