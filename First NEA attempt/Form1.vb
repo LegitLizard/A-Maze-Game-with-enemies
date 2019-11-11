@@ -35,6 +35,20 @@
         Controls.Add(SolveButton)
     End Function
 
+    Public Function Hero_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        Dim HeroImage As New PictureBox
+        Dim filename As String = System.IO.Path.Combine()
+        HeroImage.Name = "Hero Image"
+        HeroImage.Location = New Point(0, 0)
+        HeroImage.Size = New Size(50, 50)
+        HeroImage.BorderStyle = BorderStyle.None
+        HeroImage.Dock = DockStyle.None
+        HeroImage.Visible = True
+        HeroImage.Image = Image.FromFile
+        Controls.Add(HeroImage)
+    End Function
+
+
     Private Sub SolveButton_click(ByVal sender As Object, ByVal e As EventArgs) Handles SolveButton.Click
         AStar()
         PaintSolution()
@@ -626,6 +640,7 @@ Module module1
     Public PathX As New List(Of Integer)
     Public PathY As New List(Of Integer)
     ReadOnly test As Node
+    Dim KeepTrack As Integer = 0
 
     Public Class Node
         Public ParentX As Integer
@@ -644,10 +659,19 @@ Module module1
         OpenListX.Add(0)
         OpenListY.Add(0)
 
+        For a = 0 To 1000
+            Dim Item(a) As Node
+        Next
+
+        Item(KeepTrack) = New Node With {
+            .g = 0,
+            .h = CurrentY + CurrentX
+        }
+        Item(KeepTrack).f = Item(0).h + Item(0).g
 
         Item(0).g = 0
         Item(0).h = CurrentX + CurrentY
-        Item(0).f = Item(0).h + Item(0).g
+        Item(0).f = Item(0).g + Item(0).h
 
         Do
             Dim CheckInOpen As Boolean = False
