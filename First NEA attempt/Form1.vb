@@ -1,6 +1,21 @@
 ﻿Public Class Form1
     Public WithEvents SolveButton As Button
 
+    Public Function Hero_Load() Handles MyBase.Load
+        Dim HeroImage As New PictureBox()
+        Dim filename As String = System.IO.Path.Combine()
+        HeroImage.Name = "Hero Image"
+        HeroImage.Location = New Point(0, 0)
+        HeroImage.Size = New Size(50, 50)
+        HeroImage.BorderStyle = BorderStyle.None
+        HeroImage.Dock = DockStyle.None
+        HeroImage.Image = Image.FromFile("c:\hero.jpg")
+        HeroImage.SizeMode = PictureBoxSizeMode.StretchImage
+        HeroImage.Visible = True
+        HeroImage.BringToFront()
+        Controls.Add(HeroImage)
+    End Function
+
     Public Function CreatePicBoxes() Handles Me.Load
 
         Dim i As Integer = 1
@@ -24,7 +39,6 @@
                 i += 1
             Next
         Next
-
     End Function
 
     Public Function Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
@@ -34,20 +48,6 @@
         SolveButton.Size = New Size(150, 50)
         Controls.Add(SolveButton)
     End Function
-
-    Public Function Hero_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        Dim HeroImage As New PictureBox
-        Dim filename As String = System.IO.Path.Combine()
-        HeroImage.Name = "Hero Image"
-        HeroImage.Location = New Point(0, 0)
-        HeroImage.Size = New Size(50, 50)
-        HeroImage.BorderStyle = BorderStyle.None
-        HeroImage.Dock = DockStyle.None
-        HeroImage.Visible = True
-        HeroImage.Image = Image.FromFile
-        Controls.Add(HeroImage)
-    End Function
-
 
     Private Sub SolveButton_click(ByVal sender As Object, ByVal e As EventArgs) Handles SolveButton.Click
         AStar()
