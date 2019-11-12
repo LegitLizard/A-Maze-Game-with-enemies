@@ -9,7 +9,7 @@
         HeroImage.Size = New Size(50, 50)
         HeroImage.BorderStyle = BorderStyle.None
         HeroImage.Dock = DockStyle.None
-        HeroImage.Image = Image.FromFile("c:\hero.jpg")
+        HeroImage.Load("https://ucdac08ccdd07cf12feebcf4a69b.previews.dropboxusercontent.com/p/thumb/AAnG6miPkM-m7JZQpZLRgPpfVs8zVSxgrh8JlWLgzHB3SRUotP1iN21Lx1D2c8X3DPcJK9RbRj-CFr-Jn8Eb8xc1iHySLHd444W4rH6lqOj3axyNxWlEczfieM2lNW5cFVVGhSXziKgUOm0g6JrTCk6q2uU9RphIlcTViOwQ1N_M9ZsAsXilxdibe1SrOIKLRvSN8RSwyuvKPqFZ-qSzo-5ZHXTaxrVPF5BVdDqaep2IZimqlcewWxnDlmbk1e7i51AL6LA2ROlRG-rRDr9EDXKFsskDGTlbQOXkfKrw_GGr0xdUbsBX6tbaKWvnFFaRLk7Ui24oPLiGPdDwOWHB5WXZ/p.jpeg")
         HeroImage.SizeMode = PictureBoxSizeMode.StretchImage
         HeroImage.Visible = True
         HeroImage.BringToFront()
