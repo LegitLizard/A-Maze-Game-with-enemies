@@ -13,7 +13,8 @@
         HeroImage.BringToFront()
         Controls.Add(HeroImage)
     End Function
-    Private Sub HeroImage_PreviewKeyDown(ByVal sender As Object, ByVal e As PreviewKeyDownEventArgs) Handles HeroImage.PreviewKeyDown
+
+    Public Sub HeroImage_PreviewKeyDown(ByVal sender As Object, ByVal e As PreviewKeyDownEventArgs) Handles HeroImage.PreviewKeyDown
         Select Case e.KeyCode
             Case Keys.Left, Keys.Up, Keys.Right, Keys.Down
                 'need to focus
@@ -25,6 +26,7 @@
     End Sub
 
     Private Sub Form1_KeyDown(sender As Object, e As KeyEventArgs) Handles HeroImage.KeyDown
+        HeroImage.Select()
 
         If e.KeyCode = Keys.Down Then
             HeroImage.Top += 50
@@ -37,7 +39,6 @@
         End If
 
     End Sub
-
 
     Public Sub PaintSolution() Handles Me.Load
         Dim i As Integer = 1
