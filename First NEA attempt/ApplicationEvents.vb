@@ -10,7 +10,7 @@ Namespace My
     Partial Friend Class MyApplication
         Private Sub MyApplication_Startup(sender As Object, e As StartupEventArgs) Handles Me.Startup
             module1.Main()
-            Form1.Width = 1016
+            Form1.Width = 1200
             Form1.Height = 1039
         End Sub
     End Class
