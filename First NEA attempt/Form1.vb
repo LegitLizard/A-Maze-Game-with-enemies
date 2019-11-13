@@ -1,20 +1,56 @@
 ﻿Public Class Form1
     Public WithEvents SolveButton As Button
-
+    Public HeroImage As New PictureBox()
     Public Function Hero_Load() Handles MyBase.Load
-        Dim HeroImage As New PictureBox()
+
         Dim filename As String = System.IO.Path.Combine()
         HeroImage.Name = "Hero Image"
         HeroImage.Location = New Point(0, 0)
         HeroImage.Size = New Size(50, 50)
         HeroImage.BorderStyle = BorderStyle.None
         HeroImage.Dock = DockStyle.None
-        HeroImage.Load("https://ucdac08ccdd07cf12feebcf4a69b.previews.dropboxusercontent.com/p/thumb/AAnG6miPkM-m7JZQpZLRgPpfVs8zVSxgrh8JlWLgzHB3SRUotP1iN21Lx1D2c8X3DPcJK9RbRj-CFr-Jn8Eb8xc1iHySLHd444W4rH6lqOj3axyNxWlEczfieM2lNW5cFVVGhSXziKgUOm0g6JrTCk6q2uU9RphIlcTViOwQ1N_M9ZsAsXilxdibe1SrOIKLRvSN8RSwyuvKPqFZ-qSzo-5ZHXTaxrVPF5BVdDqaep2IZimqlcewWxnDlmbk1e7i51AL6LA2ROlRG-rRDr9EDXKFsskDGTlbQOXkfKrw_GGr0xdUbsBX6tbaKWvnFFaRLk7Ui24oPLiGPdDwOWHB5WXZ/p.jpeg")
+        HeroImage.Load("https://i.imgur.com/cijLVFS.jpg")
         HeroImage.SizeMode = PictureBoxSizeMode.StretchImage
         HeroImage.Visible = True
         HeroImage.BringToFront()
         Controls.Add(HeroImage)
     End Function
+
+    Private Sub Form1_Move(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        KeyPreview = True
+    End Sub
+
+    Private Sub Form1_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown
+
+        If e.KeyCode = Keys.Down Then
+            HeroImage.Top += 50
+        ElseIf e.KeyCode = Keys.Up Then
+            HeroImage.Top -= 50
+        ElseIf e.KeyCode = Keys.Left Then
+            HeroImage.Left -= 50
+        ElseIf e.KeyCode = Keys.Right Then
+            HeroImage.Left += 50
+        End If
+
+    End Sub
+
+
+    Public Sub PaintSolution() Handles Me.Load
+        Dim i As Integer = 1
+        For y = 0 To PathY.Count - 1
+            For x = 0 To PathX.Count - 1
+                Dim newPictureBox As New PictureBox
+                newPictureBox.Name = "PictureBox" & i
+                newPictureBox.Location = New Point(PathX(x), PathY(y))
+                newPictureBox.BorderStyle = BorderStyle.None
+                newPictureBox.Dock = DockStyle.None
+                newPictureBox.Visible = True
+                newPictureBox.BackColor = Color.Pink
+                Controls.Add(newPictureBox)
+                i += 1
+            Next
+        Next
+    End Sub
 
     Public Function CreatePicBoxes() Handles Me.Load
 
@@ -54,22 +90,6 @@
         PaintSolution()
     End Sub
 
-    Public Sub PaintSolution() Handles Me.Load
-        Dim i As Integer = 1
-        For y = 0 To PathY.Count - 1
-            For x = 0 To PathX.Count - 1
-                Dim newPictureBox As New PictureBox
-                newPictureBox.Name = "PictureBox" & i
-                newPictureBox.Location = New Point(PathX(x), PathY(y))
-                newPictureBox.BorderStyle = BorderStyle.None
-                newPictureBox.Dock = DockStyle.None
-                newPictureBox.Visible = True
-                newPictureBox.BackColor = Color.Pink
-                Controls.Add(newPictureBox)
-                i += 1
-            Next
-        Next
-    End Sub
 
 End Class
 
@@ -639,19 +659,18 @@ Module module1
     Public Item() As Node
     Public PathX As New List(Of Integer)
     Public PathY As New List(Of Integer)
-    ReadOnly test As Node
     Dim KeepTrack As Integer = 0
 
     Public Class Node
-        Public ParentX As Integer
-        Public ParentY As Integer
-        Public PresentX As Integer
-        Public PresentY As Integer
+        Public ParentX As Integer = 0
+        Public ParentY As Integer = 0
+        Public PresentX As Integer = 0
+        Public PresentY As Integer = 0
         Public ChildX() As Integer
         Public ChildY() As Integer
-        Public f As Integer         'total cost of node  = g+h
-        Public g As Integer         'distance from the start following path
-        Public h As Integer         'heuristic best guess
+        Public f As Integer = 0    'total cost of node  = g+h
+        Public g As Integer = 0      'distance from the start following path
+        Public h As Integer = 0        'heuristic best guess
     End Class
 
     Function AStar()
@@ -659,15 +678,7 @@ Module module1
         OpenListX.Add(0)
         OpenListY.Add(0)
 
-        For a = 0 To 1000
-            Dim Item(a) As Node
-        Next
 
-        Item(KeepTrack) = New Node With {
-            .g = 0,
-            .h = CurrentY + CurrentX
-        }
-        Item(KeepTrack).f = Item(0).h + Item(0).g
 
         Item(0).g = 0
         Item(0).h = CurrentX + CurrentY
