@@ -1,4 +1,20 @@
 ﻿Public Class Form1
+    Public WithEvents SolveButton As Button
+
+    Public Function Hero_Load() Handles MyBase.Load
+        Dim HeroImage As New PictureBox()
+        Dim filename As String = System.IO.Path.Combine()
+        HeroImage.Name = "Hero Image"
+        HeroImage.Location = New Point(0, 0)
+        HeroImage.Size = New Size(50, 50)
+        HeroImage.BorderStyle = BorderStyle.None
+        HeroImage.Dock = DockStyle.None
+        HeroImage.Load("https://ucdac08ccdd07cf12feebcf4a69b.previews.dropboxusercontent.com/p/thumb/AAnG6miPkM-m7JZQpZLRgPpfVs8zVSxgrh8JlWLgzHB3SRUotP1iN21Lx1D2c8X3DPcJK9RbRj-CFr-Jn8Eb8xc1iHySLHd444W4rH6lqOj3axyNxWlEczfieM2lNW5cFVVGhSXziKgUOm0g6JrTCk6q2uU9RphIlcTViOwQ1N_M9ZsAsXilxdibe1SrOIKLRvSN8RSwyuvKPqFZ-qSzo-5ZHXTaxrVPF5BVdDqaep2IZimqlcewWxnDlmbk1e7i51AL6LA2ROlRG-rRDr9EDXKFsskDGTlbQOXkfKrw_GGr0xdUbsBX6tbaKWvnFFaRLk7Ui24oPLiGPdDwOWHB5WXZ/p.jpeg")
+        HeroImage.SizeMode = PictureBoxSizeMode.StretchImage
+        HeroImage.Visible = True
+        HeroImage.BringToFront()
+        Controls.Add(HeroImage)
+    End Function
 
     Public Function CreatePicBoxes() Handles Me.Load
 
@@ -23,19 +39,36 @@
                 i += 1
             Next
         Next
-
     End Function
 
-    Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        Dim SolveButton As New Button()
+    Public Function Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        SolveButton = New Button()
         SolveButton.Text = "Press to Solve Maze"
         SolveButton.Location = New Point(1020, 500)
         SolveButton.Size = New Size(150, 50)
         Controls.Add(SolveButton)
+    End Function
+
+    Private Sub SolveButton_click(ByVal sender As Object, ByVal e As EventArgs) Handles SolveButton.Click
+        AStar()
+        PaintSolution()
     End Sub
 
-    Private Sub SolveButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-        AStar()
+    Public Sub PaintSolution() Handles Me.Load
+        Dim i As Integer = 1
+        For y = 0 To PathY.Count - 1
+            For x = 0 To PathX.Count - 1
+                Dim newPictureBox As New PictureBox
+                newPictureBox.Name = "PictureBox" & i
+                newPictureBox.Location = New Point(PathX(x), PathY(y))
+                newPictureBox.BorderStyle = BorderStyle.None
+                newPictureBox.Dock = DockStyle.None
+                newPictureBox.Visible = True
+                newPictureBox.BackColor = Color.Pink
+                Controls.Add(newPictureBox)
+                i += 1
+            Next
+        Next
     End Sub
 
 End Class
@@ -604,6 +637,10 @@ Module module1
     Dim CurrentY As Integer = 0
     Dim count As Integer = 0        'holds the highest item number
     Public Item() As Node
+    Public PathX As New List(Of Integer)
+    Public PathY As New List(Of Integer)
+    ReadOnly test As Node
+    Dim KeepTrack As Integer = 0
 
     Public Class Node
         Public ParentX As Integer
@@ -613,7 +650,7 @@ Module module1
         Public ChildX() As Integer
         Public ChildY() As Integer
         Public f As Integer         'total cost of node  = g+h
-        Public g As Integer         'distance from the start
+        Public g As Integer         'distance from the start following path
         Public h As Integer         'heuristic best guess
     End Class
 
@@ -621,9 +658,20 @@ Module module1
 
         OpenListX.Add(0)
         OpenListY.Add(0)
+
+        For a = 0 To 1000
+            Dim Item(a) As Node
+        Next
+
+        Item(KeepTrack) = New Node With {
+            .g = 0,
+            .h = CurrentY + CurrentX
+        }
+        Item(KeepTrack).f = Item(0).h + Item(0).g
+
         Item(0).g = 0
         Item(0).h = CurrentX + CurrentY
-        Item(0).f = Item(0).h + Item(0).g
+        Item(0).f = Item(0).g + Item(0).h
 
         Do
             Dim CheckInOpen As Boolean = False
@@ -653,10 +701,39 @@ Module module1
 
             Child(CurrentX, CurrentY)
 
-        Loop While OpenListX.Count <> 0 Or CheckInClosed(CurrentX, CurrentY) = True
+        Loop While OpenListX.Count <> 0 Or CheckInClosed(CurrentX, CurrentY) = True Or CurrentX <> 950 And CurrentY <> 950
 
+        CurrentX = 950
+        CurrentY = 950
 
+        Do
+            FindCount()
+        Loop While CheckStart() = False
 
+    End Function
+
+    Function FindCount()
+
+        For a = 0 To Item.Count
+            For b = 0 To Item(a).ChildX.Count
+                If Item(a).ChildX(b) = CurrentX And Item(a).ChildY(b) = CurrentY Then
+                    PathX.Add(Item(a).ChildX(b))
+                    PathY.Add(Item(a).ChildY(b))
+                    CurrentX = Item(a).PresentX
+                    CurrentY = Item(a).PresentY
+                End If
+            Next
+        Next
+
+    End Function
+
+    Function CheckStart()
+        For a = 0 To PathX.Count - 1
+            If PathX(a) = 0 And PathY(a) = 0 Then
+                Return True
+            End If
+        Next
+        Return False
 
     End Function
 
@@ -758,29 +835,7 @@ Module module1
             End If
             count += 3
         ElseIf x = 950 And y = 950 Then               'Bottom right corner
-            If Maze(x, y - 50) = False And CheckInOpen(x, y + 50) = False Then
-                Item(count).ChildX(0) = (x)        'Up coordinate    X
-                Item(count).ChildY(0) = (y - 50)     'Up coordinate   Y
-                Item(count + 1).ParentX = x
-                Item(count + 1).ParentY = y
-                Item(count + 1).PresentX = x
-                Item(count + 1).PresentY = y - 50
-                Item(count + 1).g = Item(count).g + 1
-                Item(count + 1).h = (950 - Item(count + 1).PresentX) + (950 - Item(count + 1).PresentY)
-                Item(count + 1).f = Item(count + 1).g + Item(count + 1).h
-            End If
-            If Maze(x - 50, y) = False And CheckInOpen(x, y + 50) = False Then
-                Item(count).ChildX(1) = (x - 50)      'Left coordinate   X
-                Item(count).ChildY(1) = (y)         'Left coordinate   Y
-                Item(count + 2).ParentX = x
-                Item(count + 2).ParentY = y
-                Item(count + 2).PresentX = x - 50
-                Item(count + 2).PresentY = y
-                Item(count + 2).g = Item(count).g + 1
-                Item(count + 2).h = (950 - Item(count + 2).PresentX) + (950 - Item(count + 2).PresentY)
-                Item(count + 2).f = Item(count + 2).g + Item(count + 2).h
-            End If
-            count += 3
+            Return True
         ElseIf x = 0 And y = 50 Then                      'special case
             If Maze(x, y + 50) = False And CheckInOpen(x, y + 50) = False Then
                 Item(count).ChildX(0) = (x)           'Down coordinate    X
