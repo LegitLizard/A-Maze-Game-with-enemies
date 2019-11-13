@@ -1,9 +1,7 @@
 ﻿Public Class Form1
     Public WithEvents SolveButton As Button
-    Public HeroImage As New PictureBox()
+    Public WithEvents HeroImage As New PictureBox()
     Public Function Hero_Load() Handles MyBase.Load
-
-        Dim filename As String = System.IO.Path.Combine()
         HeroImage.Name = "Hero Image"
         HeroImage.Location = New Point(0, 0)
         HeroImage.Size = New Size(50, 50)
@@ -15,12 +13,18 @@
         HeroImage.BringToFront()
         Controls.Add(HeroImage)
     End Function
-
-    Private Sub Form1_Move(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        KeyPreview = True
+    Private Sub HeroImage_PreviewKeyDown(ByVal sender As Object, ByVal e As PreviewKeyDownEventArgs) Handles HeroImage.PreviewKeyDown
+        Select Case e.KeyCode
+            Case Keys.Left, Keys.Up, Keys.Right, Keys.Down
+                'need to focus
+                e.IsInputKey = True
+                Me.KeyPreview = True
+            Case Else
+                Exit Select
+        End Select
     End Sub
 
-    Private Sub Form1_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown
+    Private Sub Form1_KeyDown(sender As Object, e As KeyEventArgs) Handles HeroImage.KeyDown
 
         If e.KeyCode = Keys.Down Then
             HeroImage.Top += 50
