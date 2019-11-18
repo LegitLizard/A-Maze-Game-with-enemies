@@ -20,6 +20,7 @@
         HeroImage.BringToFront()
         Controls.Add(HeroImage)
     End Function
+    Public Random As New Random
 
     Public Function Enemy_Load() Handles MyBase.Load
         Dim RandomX As Integer
@@ -42,18 +43,27 @@
         EnemyImage1.Visible = True
         EnemyImage2.Visible = True
         EnemyImage3.Visible = True
-        EnemyImage1.Load("https://imgur.com/a/iVZgedP")
-        EnemyImage2.Load("https://imgur.com/a/iVZgedP")
-        EnemyImage3.Load("https://imgur.com/a/iVZgedP")
+        EnemyImage1.Load("https://i.imgur.com/rb1lxvG.jpg")
+        EnemyImage2.Load("https://i.imgur.com/rb1lxvG.jpg")
+        EnemyImage3.Load("https://i.imgur.com/rb1lxvG.jpg")
         EnemyImage1.BorderStyle = DockStyle.None
         EnemyImage2.BorderStyle = DockStyle.None
         EnemyImage3.BorderStyle = DockStyle.None
-        Randomize()
-        RandomX = CInt(Math.Floor((19 - 10 + 1) * Rnd()))
-        EnemyImage1.Location = New Point()
-
-
-
+        RandomX = Random.Next(10, 19)     'Quad 1: X = 500 to 950   Y = 0 to 450
+        RandomX = RandomX * 50
+        RandomY = Random.Next(0, 9)
+        RandomY = RandomY * 50
+        EnemyImage1.Location = New Point(RandomX, RandomY)
+        RandomX = Random.Next(0, 9)      'Quad 2: X = 0 to 450   Y = 500 to 950
+        RandomX = RandomX * 50
+        RandomY = Random.Next(10, 19)
+        RandomY = RandomY * 50
+        EnemyImage2.Location = New Point(RandomX, RandomY)
+        RandomX = Random.Next(10, 19)     'Quad 3: X = 500 to 950    Y = 500 to 950
+        RandomX = RandomX * 50
+        RandomY = Random.Next(10, 19)
+        RandomY = RandomY * 50
+        EnemyImage3.Location = New Point(RandomX, RandomY)
         Controls.Add(EnemyImage1)
         Controls.Add(EnemyImage2)
         Controls.Add(EnemyImage3)
