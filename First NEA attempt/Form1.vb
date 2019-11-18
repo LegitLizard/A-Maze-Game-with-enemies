@@ -1,6 +1,7 @@
 ﻿Public Class Form1
-    Public WithEvents SolveButton As Button
+    'Public WithEvents SolveButton As Button
     Public WithEvents HeroImage As New PictureBox()
+
     Public Function Hero_Load() Handles MyBase.Load
         HeroImage.Name = "Hero Image"
         HeroImage.Location = New Point(0, 0)
@@ -14,30 +15,24 @@
         Controls.Add(HeroImage)
     End Function
 
-    Public Sub HeroImage_PreviewKeyDown(ByVal sender As Object, ByVal e As PreviewKeyDownEventArgs) Handles HeroImage.PreviewKeyDown
-        Select Case e.KeyCode
-            Case Keys.Left, Keys.Up, Keys.Right, Keys.Down
-                'need to focus
-                e.IsInputKey = True
-                Me.KeyPreview = True
-            Case Else
-                Exit Select
-        End Select
+
+    Private Sub Form1_PicBox(sender As Object, e As EventArgs) Handles MyBase.Load
+        KeyPreview = True
     End Sub
 
-    Private Sub Form1_KeyDown(sender As Object, e As KeyEventArgs) Handles HeroImage.KeyDown
-        HeroImage.Select()
-
+    Private Sub Form1_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles Me.KeyDown
+        If e.KeyCode = Keys.Up Then
+            HeroImage.Top -= 50
+        End If
         If e.KeyCode = Keys.Down Then
             HeroImage.Top += 50
-        ElseIf e.KeyCode = Keys.Up Then
-            HeroImage.Top -= 50
-        ElseIf e.KeyCode = Keys.Left Then
+        End If
+        If e.KeyCode = Keys.Left Then
             HeroImage.Left -= 50
-        ElseIf e.KeyCode = Keys.Right Then
+        End If
+        If e.KeyCode = Keys.Right Then
             HeroImage.Left += 50
         End If
-
     End Sub
 
     Public Sub PaintSolution() Handles Me.Load
@@ -82,18 +77,18 @@
         Next
     End Function
 
-    Public Function Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        SolveButton = New Button()
-        SolveButton.Text = "Press to Solve Maze"
-        SolveButton.Location = New Point(1020, 500)
-        SolveButton.Size = New Size(150, 50)
-        Controls.Add(SolveButton)
-    End Function
+    'Public Function Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+    '   SolveButton = New Button()
+    '  SolveButton.Text = "Press to Solve Maze"
+    ' SolveButton.Location = New Point(1020, 500)
+    'SolveButton.Size = New Size(150, 50)
+    'Controls.Add(SolveButton)
+    'End Function
 
-    Private Sub SolveButton_click(ByVal sender As Object, ByVal e As EventArgs) Handles SolveButton.Click
-        AStar()
-        PaintSolution()
-    End Sub
+    'Private Sub SolveButton_click(ByVal sender As Object, ByVal e As EventArgs) Handles SolveButton.Click
+    '   AStar()
+    '  PaintSolution()
+    'End Sub
 
 
 End Class
