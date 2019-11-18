@@ -1,8 +1,12 @@
 ﻿Public Class Form1
     'Public WithEvents SolveButton As Button
     Public WithEvents HeroImage As New PictureBox()
+    Public WithEvents EnemyImage1 As New PictureBox()
+    Public WithEvents EnemyImage2 As New PictureBox()
+    Public WithEvents EnemyImage3 As New PictureBox()
     Public HeroX As Integer = 0
     Public HeroY As Integer = 0
+
 
     Public Function Hero_Load() Handles MyBase.Load
         HeroImage.Name = "Hero Image"
@@ -17,464 +21,180 @@
         Controls.Add(HeroImage)
     End Function
 
+    Public Function Enemy_Load() Handles MyBase.Load
+        Dim RandomX As Integer
+        Dim RandomY As Integer
+        EnemyImage1.Name = "Enemy Image 1"
+        EnemyImage2.Name = "Enemy Image 2"
+        EnemyImage3.Name = "Enemy Image 3"
+        EnemyImage1.Size = New Size(50, 50)
+        EnemyImage2.Size = New Size(50, 50)
+        EnemyImage3.Size = New Size(50, 50)
+        EnemyImage1.BorderStyle = BorderStyle.None
+        EnemyImage2.BorderStyle = BorderStyle.None
+        EnemyImage3.BorderStyle = BorderStyle.None
+        EnemyImage1.SizeMode = PictureBoxSizeMode.StretchImage
+        EnemyImage2.SizeMode = PictureBoxSizeMode.StretchImage
+        EnemyImage3.SizeMode = PictureBoxSizeMode.StretchImage
+        EnemyImage1.BringToFront()
+        EnemyImage2.BringToFront()
+        EnemyImage3.BringToFront()
+        EnemyImage1.Visible = True
+        EnemyImage2.Visible = True
+        EnemyImage3.Visible = True
+        EnemyImage1.Load("https://imgur.com/a/iVZgedP")
+        EnemyImage2.Load("https://imgur.com/a/iVZgedP")
+        EnemyImage3.Load("https://imgur.com/a/iVZgedP")
+        EnemyImage1.BorderStyle = DockStyle.None
+        EnemyImage2.BorderStyle = DockStyle.None
+        EnemyImage3.BorderStyle = DockStyle.None
+        Randomize()
+        RandomX = CInt(Math.Floor((19 - 10 + 1) * Rnd()))
+        EnemyImage1.Location = New Point()
+
+
+
+        Controls.Add(EnemyImage1)
+        Controls.Add(EnemyImage2)
+        Controls.Add(EnemyImage3)
+    End Function
+
+
+    Public Function Text_Load() Handles MyBase.Load
+        Dim Info As New TextBox
+        Info.Name = "Info Button"
+        Info.Text = "Press x to solve the maze"
+        Info.Location = New Point(1020, 500)
+        Info.Size = New Size(150, 50)
+        Info.ReadOnly = True
+        Controls.Add(Info)
+    End Function
 
     Private Sub Form1_PicBox(sender As Object, e As EventArgs) Handles MyBase.Load
         KeyPreview = True
     End Sub
 
     Private Sub Form1_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles Me.KeyDown
-        If e.KeyCode = Keys.Up And Maze(HeroX, HeroY - 50) = True And HeroY >= 50 Then
-            HeroImage.Top -= 50
-            HeroY -= 50
+
+        If HeroX = 0 And HeroY = 0 Then                       'Top left corner
+            If e.KeyCode = Keys.Down And Maze(HeroX, HeroY + 50) = True Then
+                HeroImage.Top += 50      'Down
+                HeroY += 50
+            End If
+            If e.KeyCode = Keys.Right And Maze(HeroX + 50, HeroY) = True Then
+                HeroImage.Left += 50        'Right
+                HeroX += 50
+            End If
+
+        ElseIf HeroX = 0 And HeroY = 950 Then                 'Bottom left corner
+            If e.KeyCode = Keys.Up And Maze(HeroX, HeroY - 50) = True And HeroY >= 50 Then
+                HeroImage.Top -= 50       'Up
+                HeroY -= 50
+            End If
+            If e.KeyCode = Keys.Right And Maze(HeroX + 50, HeroY) = True Then
+                HeroImage.Left += 50        'Right
+                HeroX += 50
+            End If
+
+        ElseIf HeroX = 950 And HeroY = 0 Then                 'Top right corner
+            If e.KeyCode = Keys.Down And Maze(HeroX, HeroY + 50) = True Then
+                HeroImage.Top += 50      'Down
+                HeroY += 50
+            End If
+            If e.KeyCode = Keys.Left And Maze(HeroX - 50, HeroY) = True Then
+                HeroImage.Left -= 50        'Left
+                HeroX -= 50
+            End If
+
+        ElseIf HeroX = 950 And HeroY = 950 Then               'Bottom right corner
+            If e.KeyCode = Keys.Up And Maze(HeroX, HeroY - 50) = True And HeroY >= 50 Then
+                HeroImage.Top -= 50       'Up
+                HeroY -= 50
+            End If
+            If e.KeyCode = Keys.Left And Maze(HeroX - 50, HeroY) = True Then
+                HeroImage.Left -= 50        'Left
+                HeroX -= 50
+            End If
+
+        ElseIf 49 < HeroX And HeroX < 901 And HeroY = 0 Then            'Top row
+            If e.KeyCode = Keys.Down And Maze(HeroX, HeroY + 50) = True Then
+                HeroImage.Top += 50      'Down
+                HeroY += 50
+            End If
+            If e.KeyCode = Keys.Left And Maze(HeroX - 50, HeroY) = True Then
+                HeroImage.Left -= 50        'Left
+                HeroX -= 50
+            End If
+            If e.KeyCode = Keys.Right And Maze(HeroX + 50, HeroY) = True Then
+                HeroImage.Left += 50        'Right
+                HeroX += 50
+            End If
+
+        ElseIf 49 < HeroX And HeroX < 901 And HeroY = 950 Then         'Bottom row
+            If e.KeyCode = Keys.Up And Maze(HeroX, HeroY - 50) = True And HeroY >= 50 Then
+                HeroImage.Top -= 50       'Up
+                HeroY -= 50
+            End If
+            If e.KeyCode = Keys.Left And Maze(HeroX - 50, HeroY) = True Then
+                HeroImage.Left -= 50        'Left
+                HeroX -= 50
+            End If
+            If e.KeyCode = Keys.Right And Maze(HeroX + 50, HeroY) = True Then
+                HeroImage.Left += 50        'Right
+                HeroX += 50
+            End If
+
+        ElseIf HeroX = 0 And 49 < HeroY And HeroY < 901 Then         'Left row
+            If e.KeyCode = Keys.Up And Maze(HeroX, HeroY - 50) = True And HeroY >= 50 Then
+                HeroImage.Top -= 50       'Up
+                HeroY -= 50
+            End If
+            If e.KeyCode = Keys.Down And Maze(HeroX, HeroY + 50) = True Then
+                HeroImage.Top += 50      'Down
+                HeroY += 50
+            End If
+            If e.KeyCode = Keys.Right And Maze(HeroX + 50, HeroY) = True Then
+                HeroImage.Left += 50        'Right
+                HeroX += 50
+            End If
+
+        ElseIf HeroX = 950 And 49 < HeroY And HeroY < 901 Then         'Right row
+            If e.KeyCode = Keys.Up And Maze(HeroX, HeroY - 50) = True And HeroY >= 50 Then
+                HeroImage.Top -= 50       'Up
+                HeroY -= 50
+            End If
+            If e.KeyCode = Keys.Down And Maze(HeroX, HeroY + 50) = True Then
+                HeroImage.Top += 50      'Down
+                HeroY += 50
+            End If
+            If e.KeyCode = Keys.Left And Maze(HeroX - 50, HeroY) = True Then
+                HeroImage.Left -= 50        'Left
+                HeroX -= 50
+            End If
+
+        Else                'anywhere else in the maze
+            If e.KeyCode = Keys.Up And Maze(HeroX, HeroY - 50) = True And HeroY >= 50 Then
+                HeroImage.Top -= 50       'Up
+                HeroY -= 50
+            End If
+            If e.KeyCode = Keys.Down And Maze(HeroX, HeroY + 50) = True Then
+                HeroImage.Top += 50      'Down
+                HeroY += 50
+            End If
+            If e.KeyCode = Keys.Left And Maze(HeroX - 50, HeroY) = True Then
+                HeroImage.Left -= 50        'Left
+                HeroX -= 50
+            End If
+            If e.KeyCode = Keys.Right And Maze(HeroX + 50, HeroY) = True Then
+                HeroImage.Left += 50        'Right
+                HeroX += 50
+            End If
+
         End If
-        If e.KeyCode = Keys.Down And Maze(HeroX, HeroY + 50) = True Then
-            HeroImage.Top += 50
-            HeroY += 50
-        End If
-        If e.KeyCode = Keys.Left And Maze(HeroX - 50, HeroY) = True Then
-            HeroImage.Left -= 50
-            HeroX -= 50
-        End If
-        If e.KeyCode = Keys.Right And Maze(HeroX + 50, HeroY) = True Then
-            HeroImage.Left += 50
-            HeroX += 50
-        End If
 
-        If x = 0 And y = 0 Then                       'Top left corner
-            If Maze(x, y + 50) = False And Maze(x + 50, y + 50) = False And Maze(x, y + 100) = False Then
-                FrontierX.Add(x)          'Down coordinate    X
-                FrontierY.Add(y + 50)      'Down coordinate   Y
-                FrontierCount += 1
-            End If
-            If Maze(x + 50, y) = False And Maze(x + 50, y + 50) = False And Maze(x + 100, y) = False Then
-                FrontierX.Add(x + 50)      'Right coordinate    X
-                FrontierY.Add(y)         'Right coordinate   Y
-                FrontierCount += 1
-            End If
-
-        ElseIf x = 0 And y = 950 Then                 'Bottom left corner
-            If Maze(x, y - 50) = False And Maze(x, y - 100) = False And Maze(x + 50, y - 50) = False Then
-                FrontierX.Add(x)          'Up coordinate    X
-                FrontierY.Add(y - 50)     'Up coordinate   Y
-                FrontierCount += 1
-            End If
-            If Maze(x + 50, y) = False And Maze(x + 100, y) = False And Maze(x + 50, y - 50) = False Then
-                FrontierX.Add(x + 50)      'Right coordinate  X
-                FrontierY.Add(y)           'Right coordinate   Y
-                FrontierCount += 1
-            End If
-
-        ElseIf x = 950 And y = 0 Then                 'Top right corner
-            If Maze(x, y + 50) = False And Maze(x - 50, y + 50) = False And Maze(x, y + 100) = False Then
-                FrontierX.Add(x)           'Down coordinate    X
-                FrontierY.Add(y + 50)     'Down coordinate   Y
-                FrontierCount += 1
-            End If
-            If Maze(x - 50, y) = False And Maze(x - 100, y) = False And Maze(x - 50, y + 50) = False Then
-                FrontierX.Add(x - 50)    'Left coordinate    X
-                FrontierY.Add(y)          'Left coordinate   Y
-                FrontierCount += 1
-            End If
-
-        ElseIf x = 950 And y = 950 Then               'Bottom right corner
-            If Maze(x, y - 50) = False And Maze(x, y - 100) = False And Maze(x - 50, y - 50) = False Then
-                FrontierX.Add(x)        'Up coordinate    X
-                FrontierY.Add(y - 50)     'Up coordinate   Y
-                FrontierCount += 1
-            End If
-            If Maze(x - 50, y) = False And Maze(x - 50, y) = False And Maze(x - 50, y - 50) = False Then
-                FrontierX.Add(x - 50)      'Left coordinate   X
-                FrontierY.Add(y)         'Left coordinate   Y
-                FrontierCount += 1
-            End If
-
-        ElseIf x = 0 And y = 50 Then                      'special case
-            If Maze(x, y + 50) = False And Maze(x, y + 100) = False And Maze(x + 50, y + 50) = False Then
-                FrontierX.Add(x)           'Down coordinate    X
-                FrontierY.Add(y + 50)      'Down coordinate   Y
-                FrontierCount += 1
-            End If
-            If Maze(x + 50, y) = False And Maze(x + 50, y - 50) = False And Maze(x + 100, y) = False And Maze(x + 50, y + 50) = False Then
-                FrontierX.Add(x + 50)     'Right coordinate    X
-                FrontierY.Add(y)          'Right coordinate   Y
-                FrontierCount += 1
-            End If
-            If Maze(x, y - 50) = False And Maze(x + 50, y - 50) = False Then
-                FrontierX.Add(x)             'Up coordinate   X
-                FrontierY.Add(y - 50)        'Up coordinate   Y
-                FrontierCount += 1
-            End If
-
-        ElseIf x = 0 And y = 900 Then           'special case
-            If Maze(x, y + 50) = False And Maze(x + 50, y + 50) = False Then
-                FrontierX.Add(x)           'Down coordinate    X
-                FrontierY.Add(y + 50)      'Down coordinate   Y
-                FrontierCount += 1
-            End If
-            If Maze(x + 50, y) = False And Maze(x + 50, y - 50) = False And Maze(x + 100, y) = False And Maze(x + 50, y + 50) = False Then
-                FrontierX.Add(x + 50)     'Right coordinate    X
-                FrontierY.Add(y)          'Right coordinate   Y
-                FrontierCount += 1
-            End If
-            If Maze(x, y - 50) = False And Maze(x, y - 100) = False And Maze(x + 50, y - 50) = False Then
-                FrontierX.Add(x)             'Up coordinate   X
-                FrontierY.Add(y - 50)        'Up coordinate   Y
-                FrontierCount += 1
-            End If
-
-        ElseIf x = 50 And y = 0 Then                       'special case
-            If Maze(x, y + 50) = False And Maze(x - 50, y + 50) = False And Maze(x + 100, y) = False And Maze(x + 50, y + 50) = False Then
-                FrontierX.Add(x)          'Down coordinate   X
-                FrontierY.Add(y + 50)     'Down coordinate   Y
-                FrontierCount += 1
-            End If
-            If Maze(x - 50, y) = False And Maze(x - 50, y + 50) = False Then
-                FrontierX.Add(x - 50)         'Left coordinate X
-                FrontierY.Add(y)             'Left coordinate Y
-                FrontierCount += 1
-            End If
-            If Maze(x + 50, y) = False And Maze(x + 100, y) = False And Maze(x + 50, y + 50) = False Then
-                FrontierX.Add(x + 50)      'Right coordinate  X
-                FrontierY.Add(y)           'Right coordinate   Y
-                FrontierCount += 1
-            End If
-
-        ElseIf x = 50 And y = 50 Then              'special case
-            If Maze(x, y - 50) = False And Maze(x - 50, y - 50) = False And Maze(x + 50, y - 50) = False Then
-                FrontierX.Add(x)           'Up coordinate    X
-                FrontierY.Add(y - 50)    'Up coordinate   Y
-                FrontierCount += 1
-            End If
-            If Maze(x + 50, y) = False And Maze(x + 50, y - 50) = False And Maze(x + 100, y) = False And Maze(x + 50, y + 50) = False Then
-                FrontierX.Add(x + 50)      'Right coordinate  X
-                FrontierY.Add(y)           'Right coordinate   Y
-                FrontierCount += 1
-            End If
-            If Maze(x - 50, y) = False And Maze(x - 50, y - 50) = False And Maze(x - 50, y + 50) = False Then
-                'Left coordinate   X
-                'Left coordinate   Y
-            End If
-            If Maze(x, y + 50) = False And Maze(x - 50, y + 50) = False And Maze(x, y + 100) = False And Maze(x + 50, y + 50) = False Then
-                'Down coordinate X
-                'Down coordinate Y
-            End If
-
-        ElseIf x = 50 And 99 < y And y < 851 Then                     'special case
-            If Maze(x, y - 50) = False And Maze(x - 50, y - 50) = False And Maze(x + 50, y - 50) = False And Maze(x, y - 100) = False Then
-                'Up coordinate    X
-                'Up coordinate   Y
-
-            End If
-            If Maze(x + 50, y) = False And Maze(x + 50, y - 50) = False And Maze(x + 100, y) = False And Maze(x + 50, y + 50) = False Then
-                'Right coordinate  X
-                'Right coordinate   Y
-            End If
-            If Maze(x - 50, y) = False And Maze(x - 50, y - 50) = False And Maze(x - 50, y + 50) = False Then
-                'Left coordinate   X
-                'Left coordinate   Y
-            End If
-            If Maze(x, y + 50) = False And Maze(x - 50, y + 50) = False And Maze(x, y + 100) = False And Maze(x + 50, y + 50) = False Then
-                'Down coordinate X
-                'Down coordinate Y
-            End If
-
-        ElseIf x = 50 And y = 900 Then           'special case
-            If Maze(x, y - 50) = False And Maze(x - 50, y - 50) = False And Maze(x + 50, y - 50) = False And Maze(x, y - 100) = False Then
-                'Up coordinate    X
-                'Up coordinate   Y
-            End If
-            If Maze(x + 50, y) = False And Maze(x + 50, y - 50) = False And Maze(x + 100, y) = False And Maze(x + 50, y + 50) = False Then
-                'Right coordinate  X
-                'Right coordinate   Y
-
-            End If
-            If Maze(x - 50, y) = False And Maze(x - 50, y - 50) = False And Maze(x - 50, y + 50) = False Then
-                'Left coordinate   X
-                'Left coordinate   Y
-
-            End If
-            If Maze(x, y + 50) = False And Maze(x - 50, y + 50) = False And Maze(x + 50, y + 50) = False Then
-                'Down coordinate X
-                'Down coordinate Y
-            End If
-
-        ElseIf x = 50 And y = 950 Then          'special case
-            If Maze(x, y - 50) = False And Maze(x - 50, y - 50) = False And Maze(x, y - 100) = False And Maze(x + 50, y - 50) = False Then
-                'Up coordinate    X
-                'Up coordinate   Y
-
-            End If
-            If Maze(x + 50, y) = False And Maze(x + 50, y - 50) = False And Maze(x + 100, y) = False Then
-                'Right coordinate  X
-                'Right coordinate   Y
-            End If
-            If Maze(x - 50, y) = False And Maze(x - 50, y - 50) = False Then
-                'Left coordinate   X
-                'Left coordinate   Y
-
-            End If
-
-        ElseIf 99 < x And x < 851 And y = 50 Then                 'special case
-            If Maze(x, y - 50) = False And Maze(x - 50, y - 50) = False And Maze(x + 50, y - 50) = False Then
-                'Up coordinate    X
-                'Up coordinate   Y
-
-            End If
-            If Maze(x + 50, y) = False And Maze(x + 50, y - 50) = False And Maze(x + 100, y) = False And Maze(x + 50, y + 50) = False Then
-                'Right coordinate  X
-                'Right coordinate   Y
-
-            End If
-            If Maze(x - 50, y) = False And Maze(x - 50, y - 50) = False And Maze(x - 50, y + 50) = False And Maze(x - 100, y) = False Then
-                'Left coordinate   X
-                'Left coordinate   Y
-
-            End If
-            If Maze(x, y + 50) = False And Maze(x - 50, y + 50) = False And Maze(x + 50, y + 50) = False And Maze(x, y + 100) = False Then
-                'Down coordinate X
-                'Down coordinate Y
-
-            End If
-
-        ElseIf 99 < x And x < 851 And y = 900 Then         'special case
-            If Maze(x, y - 50) = False And Maze(x - 50, y - 50) = False And Maze(x + 50, y - 50) = False And Maze(x, y - 100) = False Then
-                'Up coordinate    X
-                'Up coordinate   Y
-            End If
-            If Maze(x + 50, y) = False And Maze(x + 50, y - 50) = False And Maze(x + 100, y) = False And Maze(x + 50, y + 50) = False Then
-                'Right coordinate  X
-                'Right coordinate   Y
-
-            End If
-            If Maze(x - 50, y) = False And Maze(x - 50, y - 50) = False And Maze(x - 50, y + 50) = False And Maze(x - 100, y) = False Then
-                'Left coordinate   X
-                'Left coordinate   Y
-
-            End If
-            If Maze(x, y + 50) = False And Maze(x - 50, y + 50) = False And Maze(x + 50, y + 50) = False Then
-                'Down coordinate X
-                'Down coordinate Y
-            End If
-
-        ElseIf x = 900 And y = 0 Then         'special case
-            If Maze(x + 50, y) = False And Maze(x + 50, y + 50) = False Then
-                'Right coordinate  X
-                'Right coordinate   Y
-
-            End If
-            If Maze(x - 50, y) = False And Maze(x - 50, y + 50) = False And Maze(x - 100, y) = False Then
-                'Left coordinate   X
-                'Left coordinate   Y
-
-            End If
-            If Maze(x, y + 50) = False And Maze(x - 50, y + 50) = False And Maze(x + 50, y + 50) = False And Maze(x, y + 100) = False Then
-                'Down coordinate X
-                'Down coordinate Y
-
-            End If
-
-        ElseIf x = 900 And y = 50 Then              'special case
-            If Maze(x, y - 50) = False And Maze(x - 50, y - 50) = False And Maze(x + 50, y - 50) = False Then
-                'Up coordinate    X
-                'Up coordinate   Y
-
-            End If
-            If Maze(x + 50, y) = False And Maze(x + 50, y - 50) = False And Maze(x + 50, y + 50) = False Then
-                'Right coordinate  X
-                'Right coordinate   Y
-
-            End If
-            If Maze(x - 50, y) = False And Maze(x - 50, y - 50) = False And Maze(x - 50, y + 50) = False And Maze(x - 100, y) = False Then
-                'Left coordinate   X
-                'Left coordinate   Y
-
-            End If
-            If Maze(x, y + 50) = False And Maze(x - 50, y + 50) = False And Maze(x + 50, y + 50) = False And Maze(x, y + 100) = False Then
-                'Down coordinate X
-                'Down coordinate Y
-            End If
-
-        ElseIf x = 900 And 99 < y And y < 851 Then            'special case
-            If Maze(x, y - 50) = False And Maze(x - 50, y - 50) = False And Maze(x + 50, y - 50) = False And Maze(x, y - 100) = False Then
-                'Up coordinate    X
-                'Up coordinate   Y
-
-            End If
-            If Maze(x + 50, y) = False And Maze(x + 50, y - 50) = False And Maze(x + 50, y + 50) = False Then
-                'Right coordinate  X
-                'Right coordinate   Y
-
-            End If
-            If Maze(x - 50, y) = False And Maze(x - 50, y - 50) = False And Maze(x - 50, y + 50) = False And Maze(x - 100, y) = False Then
-                'Left coordinate   X
-                'Left coordinate   Y
-
-            End If
-            If Maze(x, y + 50) = False And Maze(x - 50, y + 50) = False And Maze(x + 50, y + 50) = False And Maze(x, y + 100) = False Then
-                'Down coordinate X
-                'Down coordinate Y
-            End If
-
-        ElseIf x = 900 And y = 900 Then                     'special case
-            If Maze(x, y - 50) = False And Maze(x - 50, y - 50) = False And Maze(x + 50, y - 50) = False And Maze(x, y - 100) = False Then
-                'Up coordinate    X
-                'Up coordinate   Y
-
-            End If
-            If Maze(x + 50, y) = False And Maze(x + 50, y - 50) = False And Maze(x + 50, y + 50) = False Then
-                'Right coordinate  X
-                'Right coordinate   Y
-
-            End If
-            If Maze(x - 50, y) = False And Maze(x - 50, y - 50) = False And Maze(x - 50, y + 50) = False And Maze(x - 100, y) = False Then
-                'Left coordinate   X
-                'Left coordinate   Y
-
-            End If
-            If Maze(x, y + 50) = False And Maze(x - 50, y + 50) = False And Maze(x + 50, y + 50) = False Then
-                'Down coordinate X
-                'Down coordinate Y
-
-            End If
-
-        ElseIf x = 900 And y = 950 Then                'special case
-            If Maze(x, y - 50) = False And Maze(x - 50, y - 50) = False And Maze(x + 50, y - 50) = False And Maze(x, y - 100) = False Then
-                'Up coordinate    X
-                'Up coordinate   Y
-
-            End If
-            If Maze(x + 50, y) = False And Maze(x + 50, y - 50) = False Then
-                'Right coordinate  X
-                'Right coordinate   Y
-            End If
-            If Maze(x - 50, y) = False And Maze(x - 50, y - 50) = False And Maze(x - 100, y) = False Then
-                'Left coordinate   X
-                'Left coordinate   Y
-
-            End If
-
-        ElseIf x = 950 And y = 50 Then                'special case
-            If Maze(x, y - 50) = False And Maze(x - 50, y - 50) = False Then
-                'Up coordinate    X
-                'Up coordinate   Y
-            End If
-            If Maze(x - 50, y) = False And Maze(x - 50, y - 50) = False And Maze(x - 100, y) = False And Maze(x - 50, y + 50) = False Then
-                'Left coordinate   X
-                'Left coordinate   Y
-
-            End If
-            If Maze(x, y + 50) = False And Maze(x - 50, y + 50) = False And Maze(x, y + 100) = False Then
-                'Down coordinate X
-                'Down coordinate Y
-
-            End If
-
-        ElseIf x = 950 And y = 900 Then             'special case
-            If Maze(x, y - 50) = False And Maze(x - 50, y - 50) = False And Maze(x, y - 100) = False Then
-                'Up coordinate    X
-                'Up coordinate   Y
-
-            End If
-            If Maze(x - 50, y) = False And Maze(x - 50, y - 50) = False And Maze(x - 100, y) = False And Maze(x - 50, y + 50) = False Then
-                'Left coordinate   X
-                'Left coordinate   Y
-
-            End If
-            If Maze(x, y + 50) = False And Maze(x - 50, y + 50) = False Then
-                'Down coordinate X
-                'Down coordinate Y
-            End If
-
-        ElseIf x = 0 Then                             'If the current square is at the left border
-            If Maze(x, y + 50) = False And Maze(x, y + 100) = False And Maze(x + 50, y + 50) = False Then
-                'Down coordinate    X
-                'Down coordinate   Y
-
-            End If
-            If Maze(x + 50, y) = False And Maze(x + 100, y) = False And Maze(x + 50, y - 50) = False And Maze(x + 50, y + 50) = False Then
-                'Right coordinate    X
-                'Right coordinate   Y
-
-            End If
-            If Maze(x, y - 50) = False And Maze(x, y - 100) = False And Maze(x + 50, y - 50) = False Then
-                'Up coordinate   X
-                'Up coordinate   Y
-
-            End If
-
-        ElseIf y = 0 Then                             'If the current square is at the top border
-            If Maze(x, y + 50) = False And Maze(x, y + 100) = False And Maze(x + 50, y + 50) = False And Maze(x - 50, y + 50) = False Then
-                'Down coordinate   X
-                'Down coordinate   Y
-
-            End If
-            If Maze(x - 50, y) = False And Maze(x - 100, y) = False And Maze(x - 50, y + 50) = False Then
-                'Left coordinate X
-                'Left coordinate Y
-
-            End If
-            If Maze(x + 50, y) = False And Maze(x + 100, y) = False And Maze(x + 50, y + 50) = False Then
-                'Right coordinate  X
-                'Right coordinate   Y
-
-            End If
-
-        ElseIf x = 950 Then                           'If the current square is at the right border
-            If Maze(x, y - 50) = False And Maze(x, y - 100) = False And Maze(x - 50, y - 50) = False Then
-                'Up coordinate    X
-                'Up coordinate   Y
-
-            End If
-            If Maze(x, y + 50) = False And Maze(x, y + 50) = False And Maze(x - 50, y + 50) = False Then
-                'Down coordinate X
-                'Down coordinate Y
-
-            End If
-            If Maze(x - 50, y) = False And Maze(x - 100, y) = False And Maze(x - 50, y - 50) = False And Maze(x - 50, y + 50) = False Then
-                'Left coordinate   X
-                'Left coordinate   Y
-
-            End If
-
-        ElseIf y = 950 Then                           'If the current square is at the bottom border
-            If Maze(x, y - 50) = False And Maze(x, y - 100) = False And Maze(x - 50, y - 50) = False And Maze(x + 50, y - 50) = False Then
-                'Up coordinate    X
-                'Up coordinate   Y
-
-            End If
-            If Maze(x + 50, y) = False And Maze(x + 50, y - 50) = False And Maze(x + 100, y) = False Then
-                'Right coordinate  X
-                'Right coordinate   Y
-
-            End If
-            If Maze(x - 50, y) = False And Maze(x - 50, y - 50) = False And Maze(x - 100, y) = False Then
-                'Left coordinate   X
-                'Left coordinate   Y
-
-            End If
-
-        Else                'anywhere else in the square
-            If Maze(x, y - 50) = False And Maze(x - 50, y - 50) = False And Maze(x + 50, y - 50) = False And Maze(x, y - 100) = False Then
-                'Up coordinate    X
-                'Up coordinate   Y
-
-            End If
-            If Maze(x + 50, y) = False And Maze(x + 50, y - 50) = False And Maze(x + 50, y + 50) = False And Maze(x + 100, y) = False Then
-                'Right coordinate  X
-                'Right coordinate   Y
-
-            End If
-            If Maze(x - 50, y) = False And Maze(x - 50, y - 50) = False And Maze(x - 50, y + 50) = False And Maze(x - 100, y) = False Then
-                'Left coordinate   X
-                'Left coordinate   Y
-
-            End If
-            If Maze(x, y + 50) = False And Maze(x - 50, y + 50) = False And Maze(x + 50, y + 50) = False And Maze(x, y + 100) = False Then
-                'Down coordinate X
-                'Down coordinate Y
-
-            End If
-
+        If e.KeyCode = 88 Then
+            AStar()
+            PaintSolution()
         End If
 
     End Sub
@@ -520,20 +240,6 @@
             Next
         Next
     End Function
-
-    'Public Function Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-    '   SolveButton = New Button()
-    '  SolveButton.Text = "Press to Solve Maze"
-    ' SolveButton.Location = New Point(1020, 500)
-    'SolveButton.Size = New Size(150, 50)
-    'Controls.Add(SolveButton)
-    'End Function
-
-    'Private Sub SolveButton_click(ByVal sender As Object, ByVal e As EventArgs) Handles SolveButton.Click
-    '   AStar()
-    '  PaintSolution()
-    'End Sub
-
 
 End Class
 
