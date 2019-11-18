@@ -6,7 +6,12 @@
     Public WithEvents EnemyImage3 As New PictureBox()
     Public HeroX As Integer = 0
     Public HeroY As Integer = 0
-
+    Public Enemy1X As Integer
+    Public Enemy1Y As Integer
+    Public Enemy2X As Integer
+    Public Enemy2Y As Integer
+    Public Enemy3X As Integer
+    Public Enemy3Y As Integer
 
     Public Function Hero_Load() Handles MyBase.Load
         HeroImage.Name = "Hero Image"
@@ -53,22 +58,27 @@
         RandomX = RandomX * 50
         RandomY = Random.Next(0, 9)
         RandomY = RandomY * 50
+        Enemy1X = RandomX
+        Enemy1Y = RandomY
         EnemyImage1.Location = New Point(RandomX, RandomY)
         RandomX = Random.Next(0, 9)      'Quad 2: X = 0 to 450   Y = 500 to 950
         RandomX = RandomX * 50
         RandomY = Random.Next(10, 19)
         RandomY = RandomY * 50
+        Enemy2X = RandomX
+        Enemy2Y = RandomY
         EnemyImage2.Location = New Point(RandomX, RandomY)
         RandomX = Random.Next(10, 19)     'Quad 3: X = 500 to 950    Y = 500 to 950
         RandomX = RandomX * 50
         RandomY = Random.Next(10, 19)
         RandomY = RandomY * 50
+        Enemy3X = RandomX
+        Enemy3Y = RandomY
         EnemyImage3.Location = New Point(RandomX, RandomY)
         Controls.Add(EnemyImage1)
         Controls.Add(EnemyImage2)
         Controls.Add(EnemyImage3)
     End Function
-
 
     Public Function Text_Load() Handles MyBase.Load
         Dim Info As New TextBox
@@ -250,6 +260,36 @@
             Next
         Next
     End Function
+
+    Public Sub EnemyMove()
+        Dim random As New Random
+        Dim MoveChoice As Integer
+
+        Do
+            Threading.Thread.Sleep(1500)
+            MoveChoice = random.Next(1, 4)
+
+            If MoveChoice = 1 Then       'Move up
+                EnemyImage1.Location = New Point(Enemy1X, Enemy1Y - 50)
+                Enemy1Y -= 50
+            ElseIf MoveChoice = 2 Then     'Move right
+                EnemyImage1.Location = New Point(Enemy1X + 50, Enemy1Y)
+                Enemy1X += 50
+            ElseIf MoveChoice = 3 Then      'Move down
+                EnemyImage1.Location = New Point(Enemy1X, Enemy1Y + 50)
+                Enemy1Y += 50
+            ElseIf MoveChoice = 4 Then      'Move left
+                EnemyImage1.Location = New Point(Enemy1X - 50, Enemy1Y)
+                Enemy1X -= 50
+            End If
+
+        Loop
+
+
+
+
+    End Sub
+
 
 End Class
 
