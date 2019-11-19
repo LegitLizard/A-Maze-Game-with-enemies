@@ -224,7 +224,7 @@
             AStar()
             PaintSolution()
         End If
-
+        EnemyMove()
     End Sub
 
     Public Sub PaintSolution() Handles Me.Load
@@ -272,33 +272,57 @@
     Public Sub EnemyMove()
         Dim random As New Random
         Dim MoveChoice As Integer
-        Console.Beep()
-        Threading.Thread.Sleep(1500)
-        Console.Beep()
-        EnemyImage1.Left -= 50
-        'console.writeline()
-        Do
-            Threading.Thread.Sleep(1500)
-            MoveChoice = random.Next(1, 4)
 
-            If MoveChoice = 1 Then       'Move up
-                EnemyImage1.Top -= 50
-                Enemy1Y -= 50
-            ElseIf MoveChoice = 2 Then     'Move right
-                EnemyImage1.Left += 50
-                Enemy1X += 50
-            ElseIf MoveChoice = 3 Then      'Move down
-                EnemyImage1.Top += 50
-                Enemy1Y += 50
-            ElseIf MoveChoice = 4 Then      'Move left
-                EnemyImage1.Left -= 50
-                Enemy1X -= 50
-            End If
+        'Threading.Thread.Sleep(1000)
+Jump1:
+        MoveChoice = random.Next(1, 5)       'Lower bound is inclusive, upper bound is exclusive
+        If MoveChoice = 1 And Maze(Enemy1X, Enemy1Y - 50) = True Then       'Move up
+            EnemyImage1.Top -= 50
+            Enemy1Y -= 50
+        ElseIf MoveChoice = 2 And Maze(Enemy1X + 50, Enemy1Y) = True Then     'Move right
+            EnemyImage1.Left += 50
+            Enemy1X += 50
+        ElseIf MoveChoice = 3 And Maze(Enemy1X, Enemy1Y + 50) = True Then      'Move down
+            EnemyImage1.Top += 50
+            Enemy1Y += 50
+        ElseIf MoveChoice = 4 And Maze(Enemy1X - 50, Enemy1Y) = True Then  'Move left
+            EnemyImage1.Left -= 50
+            Enemy1X -= 50
+        Else
+            GoTo Jump1
+        End If
+Jump2:
+        MoveChoice = random.Next(1, 5)
+        If MoveChoice = 1 Then       'Move up
+            EnemyImage2.Top -= 50
+            Enemy2Y -= 50
+        ElseIf MoveChoice = 2 Then     'Move right
+            EnemyImage2.Left += 50
+            Enemy2X += 50
+        ElseIf MoveChoice = 3 Then      'Move down
+            EnemyImage2.Top += 50
+            Enemy2Y += 50
+        ElseIf MoveChoice = 4 Then      'Move left
+            EnemyImage2.Left -= 50
+            Enemy2X -= 50
+        Else
+            GoTo Jump2
+        End If
 
-        Loop
-
-
-
+        MoveChoice = random.Next(1, 5)
+        If MoveChoice = 1 Then       'Move up
+            EnemyImage3.Top -= 50
+            Enemy3Y -= 50
+        ElseIf MoveChoice = 2 Then     'Move right
+            EnemyImage3.Left += 50
+            Enemy3X += 50
+        ElseIf MoveChoice = 3 Then      'Move down
+            EnemyImage3.Top += 50
+            Enemy3Y += 50
+        ElseIf MoveChoice = 4 Then      'Move left
+            EnemyImage3.Left -= 50
+            Enemy3X -= 50
+        End If
 
     End Sub
 
@@ -888,7 +912,8 @@ Module module1
     Dim CurrentX As Integer = 0
     Dim CurrentY As Integer = 0
     Dim count As Integer = 0        'holds the highest item number
-    Public Item() As Node
+    'Public Item() As Node
+    Public Item As New List(Of Node)
     Public PathX As New List(Of Integer)
     Public PathY As New List(Of Integer)
     Dim KeepTrack As Integer = 0
@@ -911,8 +936,11 @@ Module module1
         OpenListY.Add(0)
 
 
+        'Item(0).g = 0
 
-        Item(0).g = 0
+
+
+
         Item(0).h = CurrentX + CurrentY
         Item(0).f = Item(0).g + Item(0).h
 
@@ -920,7 +948,7 @@ Module module1
             Dim CheckInOpen As Boolean = False
             Dim Position As Integer
 
-            For b = 0 To Item.Length - 1
+            For b = 0 To Item.Count - 1
                 If Item(b).f <= fmin Then
                     fmin = b
                 End If
