@@ -54,26 +54,34 @@
         EnemyImage1.BorderStyle = DockStyle.None
         EnemyImage2.BorderStyle = DockStyle.None
         EnemyImage3.BorderStyle = DockStyle.None
-        RandomX = Random.Next(10, 19)     'Quad 1: X = 500 to 950   Y = 0 to 450
-        RandomX = RandomX * 50
-        RandomY = Random.Next(0, 9)
-        RandomY = RandomY * 50
-        Enemy1X = RandomX
-        Enemy1Y = RandomY
+
+        Do
+            RandomX = Random.Next(10, 19)     'Quad 1: X = 500 to 950   Y = 0 to 450
+            RandomX = RandomX * 50
+            RandomY = Random.Next(0, 9)
+            RandomY = RandomY * 50
+            Enemy1X = RandomX
+            Enemy1Y = RandomY
+        Loop While Maze(RandomX, RandomY) = False
         EnemyImage1.Location = New Point(RandomX, RandomY)
-        RandomX = Random.Next(0, 9)      'Quad 2: X = 0 to 450   Y = 500 to 950
-        RandomX = RandomX * 50
-        RandomY = Random.Next(10, 19)
-        RandomY = RandomY * 50
-        Enemy2X = RandomX
-        Enemy2Y = RandomY
+
+        Do
+            RandomX = Random.Next(0, 9)      'Quad 2: X = 0 to 450   Y = 500 to 950
+            RandomX = RandomX * 50
+            RandomY = Random.Next(10, 19)
+            RandomY = RandomY * 50
+            Enemy2X = RandomX
+            Enemy2Y = RandomY
+        Loop While Maze(RandomX, RandomY) = False
         EnemyImage2.Location = New Point(RandomX, RandomY)
-        RandomX = Random.Next(10, 19)     'Quad 3: X = 500 to 950    Y = 500 to 950
-        RandomX = RandomX * 50
-        RandomY = Random.Next(10, 19)
-        RandomY = RandomY * 50
-        Enemy3X = RandomX
-        Enemy3Y = RandomY
+        Do
+            RandomX = Random.Next(10, 19)     'Quad 3: X = 500 to 950    Y = 500 to 950
+            RandomX = RandomX * 50
+            RandomY = Random.Next(10, 19)
+            RandomY = RandomY * 50
+            Enemy3X = RandomX
+            Enemy3Y = RandomY
+        Loop While Maze(RandomX, RandomY) = False
         EnemyImage3.Location = New Point(RandomX, RandomY)
         Controls.Add(EnemyImage1)
         Controls.Add(EnemyImage2)
@@ -264,22 +272,26 @@
     Public Sub EnemyMove()
         Dim random As New Random
         Dim MoveChoice As Integer
-
+        Console.Beep()
+        Threading.Thread.Sleep(1500)
+        Console.Beep()
+        EnemyImage1.Left -= 50
+        'console.writeline()
         Do
             Threading.Thread.Sleep(1500)
             MoveChoice = random.Next(1, 4)
 
             If MoveChoice = 1 Then       'Move up
-                EnemyImage1.Location = New Point(Enemy1X, Enemy1Y - 50)
+                EnemyImage1.Top -= 50
                 Enemy1Y -= 50
             ElseIf MoveChoice = 2 Then     'Move right
-                EnemyImage1.Location = New Point(Enemy1X + 50, Enemy1Y)
+                EnemyImage1.Left += 50
                 Enemy1X += 50
             ElseIf MoveChoice = 3 Then      'Move down
-                EnemyImage1.Location = New Point(Enemy1X, Enemy1Y + 50)
+                EnemyImage1.Top += 50
                 Enemy1Y += 50
             ElseIf MoveChoice = 4 Then      'Move left
-                EnemyImage1.Location = New Point(Enemy1X - 50, Enemy1Y)
+                EnemyImage1.Left -= 50
                 Enemy1X -= 50
             End If
 
@@ -320,7 +332,27 @@ Module module1
             FrontierX.RemoveAt(RandomNumber)
             FrontierY.RemoveAt(RandomNumber)
         Loop
+
         Maze(950, 950) = True
+
+        If Maze(900, 950) = False And Maze(850, 950) = False And Maze(900, 900) = False And Maze(950, 900) = False And Maze(950, 950) = False Then
+            If Maze(950, 800) = True Then
+                Maze(950, 850) = True
+                Maze(950, 900) = True
+            ElseIf Maze(800, 950) = True Then
+                Maze(850, 950) = True
+                Maze(900, 950) = True
+            End If
+        ElseIf Maze(950, 900) = False And Maze(900, 950) = False Then
+            If Maze(850, 950) = True Then
+                Maze(900, 950) = True
+            ElseIf Maze(950, 850) = True Then
+                Maze(950, 900) = True
+            ElseIf Maze(900, 900) = True Then
+                Maze(950, 900) = True
+                Maze(900, 950) = True
+            End If
+        End If
 
     End Sub
 
