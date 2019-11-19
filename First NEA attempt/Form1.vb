@@ -108,114 +108,138 @@
             If e.KeyCode = Keys.Down And Maze(HeroX, HeroY + 50) = True Then
                 HeroImage.Top += 50      'Down
                 HeroY += 50
+                EnemyMove()
             End If
             If e.KeyCode = Keys.Right And Maze(HeroX + 50, HeroY) = True Then
                 HeroImage.Left += 50        'Right
                 HeroX += 50
+                EnemyMove()
             End If
 
         ElseIf HeroX = 0 And HeroY = 950 Then                 'Bottom left corner
             If e.KeyCode = Keys.Up And Maze(HeroX, HeroY - 50) = True And HeroY >= 50 Then
                 HeroImage.Top -= 50       'Up
                 HeroY -= 50
+                EnemyMove()
             End If
             If e.KeyCode = Keys.Right And Maze(HeroX + 50, HeroY) = True Then
                 HeroImage.Left += 50        'Right
                 HeroX += 50
+                EnemyMove()
             End If
 
         ElseIf HeroX = 950 And HeroY = 0 Then                 'Top right corner
             If e.KeyCode = Keys.Down And Maze(HeroX, HeroY + 50) = True Then
                 HeroImage.Top += 50      'Down
                 HeroY += 50
+                EnemyMove()
             End If
             If e.KeyCode = Keys.Left And Maze(HeroX - 50, HeroY) = True Then
                 HeroImage.Left -= 50        'Left
                 HeroX -= 50
+                EnemyMove()
             End If
 
         ElseIf HeroX = 950 And HeroY = 950 Then               'Bottom right corner
             If e.KeyCode = Keys.Up And Maze(HeroX, HeroY - 50) = True And HeroY >= 50 Then
                 HeroImage.Top -= 50       'Up
                 HeroY -= 50
+                EnemyMove()
             End If
             If e.KeyCode = Keys.Left And Maze(HeroX - 50, HeroY) = True Then
                 HeroImage.Left -= 50        'Left
                 HeroX -= 50
+                EnemyMove()
             End If
 
         ElseIf 49 < HeroX And HeroX < 901 And HeroY = 0 Then            'Top row
             If e.KeyCode = Keys.Down And Maze(HeroX, HeroY + 50) = True Then
                 HeroImage.Top += 50      'Down
                 HeroY += 50
+                EnemyMove()
             End If
             If e.KeyCode = Keys.Left And Maze(HeroX - 50, HeroY) = True Then
                 HeroImage.Left -= 50        'Left
                 HeroX -= 50
+                EnemyMove()
             End If
             If e.KeyCode = Keys.Right And Maze(HeroX + 50, HeroY) = True Then
                 HeroImage.Left += 50        'Right
                 HeroX += 50
+                EnemyMove()
             End If
 
         ElseIf 49 < HeroX And HeroX < 901 And HeroY = 950 Then         'Bottom row
             If e.KeyCode = Keys.Up And Maze(HeroX, HeroY - 50) = True And HeroY >= 50 Then
                 HeroImage.Top -= 50       'Up
                 HeroY -= 50
+                EnemyMove()
             End If
             If e.KeyCode = Keys.Left And Maze(HeroX - 50, HeroY) = True Then
                 HeroImage.Left -= 50        'Left
                 HeroX -= 50
+                EnemyMove()
             End If
             If e.KeyCode = Keys.Right And Maze(HeroX + 50, HeroY) = True Then
                 HeroImage.Left += 50        'Right
                 HeroX += 50
+                EnemyMove()
             End If
 
         ElseIf HeroX = 0 And 49 < HeroY And HeroY < 901 Then         'Left row
             If e.KeyCode = Keys.Up And Maze(HeroX, HeroY - 50) = True And HeroY >= 50 Then
                 HeroImage.Top -= 50       'Up
                 HeroY -= 50
+                EnemyMove()
             End If
             If e.KeyCode = Keys.Down And Maze(HeroX, HeroY + 50) = True Then
                 HeroImage.Top += 50      'Down
                 HeroY += 50
+                EnemyMove()
             End If
             If e.KeyCode = Keys.Right And Maze(HeroX + 50, HeroY) = True Then
                 HeroImage.Left += 50        'Right
                 HeroX += 50
+                EnemyMove()
             End If
 
         ElseIf HeroX = 950 And 49 < HeroY And HeroY < 901 Then         'Right row
             If e.KeyCode = Keys.Up And Maze(HeroX, HeroY - 50) = True And HeroY >= 50 Then
                 HeroImage.Top -= 50       'Up
                 HeroY -= 50
+                EnemyMove()
             End If
             If e.KeyCode = Keys.Down And Maze(HeroX, HeroY + 50) = True Then
                 HeroImage.Top += 50      'Down
                 HeroY += 50
+                EnemyMove()
             End If
             If e.KeyCode = Keys.Left And Maze(HeroX - 50, HeroY) = True Then
                 HeroImage.Left -= 50        'Left
                 HeroX -= 50
+                EnemyMove()
             End If
 
         Else                'anywhere else in the maze
             If e.KeyCode = Keys.Up And Maze(HeroX, HeroY - 50) = True And HeroY >= 50 Then
                 HeroImage.Top -= 50       'Up
                 HeroY -= 50
+                EnemyMove()
             End If
             If e.KeyCode = Keys.Down And Maze(HeroX, HeroY + 50) = True Then
                 HeroImage.Top += 50      'Down
                 HeroY += 50
+                EnemyMove()
             End If
             If e.KeyCode = Keys.Left And Maze(HeroX - 50, HeroY) = True Then
                 HeroImage.Left -= 50        'Left
                 HeroX -= 50
+                EnemyMove()
             End If
             If e.KeyCode = Keys.Right And Maze(HeroX + 50, HeroY) = True Then
                 HeroImage.Left += 50        'Right
                 HeroX += 50
+                EnemyMove()
             End If
 
         End If
@@ -224,7 +248,7 @@
             AStar()
             PaintSolution()
         End If
-        EnemyMove()
+
     End Sub
 
     Public Sub PaintSolution() Handles Me.Load
@@ -269,59 +293,195 @@
         Next
     End Function
 
+    Public Sub CheckDeath()
+        If HeroX = Enemy1X And HeroY = Enemy1Y Or HeroX = Enemy2X And HeroY = Enemy2Y Or HeroX = Enemy3X And HeroY = Enemy3Y Then
+            module1.Hide()
+        End If
+    End Sub
+
     Public Sub EnemyMove()
         Dim random As New Random
         Dim MoveChoice As Integer
 
-        'Threading.Thread.Sleep(1000)
 Jump1:
-        MoveChoice = random.Next(1, 5)       'Lower bound is inclusive, upper bound is exclusive
-        If MoveChoice = 1 And Maze(Enemy1X, Enemy1Y - 50) = True Then       'Move up
-            EnemyImage1.Top -= 50
-            Enemy1Y -= 50
-        ElseIf MoveChoice = 2 And Maze(Enemy1X + 50, Enemy1Y) = True Then     'Move right
-            EnemyImage1.Left += 50
-            Enemy1X += 50
-        ElseIf MoveChoice = 3 And Maze(Enemy1X, Enemy1Y + 50) = True Then      'Move down
-            EnemyImage1.Top += 50
-            Enemy1Y += 50
-        ElseIf MoveChoice = 4 And Maze(Enemy1X - 50, Enemy1Y) = True Then  'Move left
-            EnemyImage1.Left -= 50
-            Enemy1X -= 50
+        If Enemy1X = 0 And Enemy1Y = 0 Then
+            MoveChoice = random.Next(2, 4)         'Lower bound is inclusive, upper bound is exclusive
+        ElseIf Enemy1X = 0 And Enemy1Y = 950 Then
+            MoveChoice = random.Next(1, 3)
+        ElseIf Enemy1X = 950 And Enemy1Y = 0 Then
+            MoveChoice = random.Next(3, 5)
+        ElseIf Enemy1X = 950 And Enemy1Y = 950 Then
+            Do
+                MoveChoice = random.Next(1, 5)
+            Loop Until MoveChoice = 1 Or MoveChoice = 4
+        ElseIf 49 < Enemy1X And Enemy1X < 901 And Enemy1Y = 0 Then
+            MoveChoice = random.Next(2, 5)
+        ElseIf 49 < Enemy1X And Enemy1X < 901 And Enemy1Y = 950 Then
+            Do
+                MoveChoice = random.Next(1, 5)
+            Loop Until MoveChoice = 1 Or MoveChoice = 4 Or MoveChoice = 2
+        ElseIf Enemy1X = 0 And 49 < Enemy1Y And Enemy1Y < 901 Then
+            MoveChoice = random.Next(1, 4)
+        ElseIf Enemy1X = 950 And 49 < Enemy1Y And Enemy1Y < 901 Then
+            Do
+                MoveChoice = random.Next(1, 5)
+            Loop Until MoveChoice = 1 Or MoveChoice = 4 Or MoveChoice = 3
         Else
-            GoTo Jump1
-        End If
-Jump2:
-        MoveChoice = random.Next(1, 5)
-        If MoveChoice = 1 Then       'Move up
-            EnemyImage2.Top -= 50
-            Enemy2Y -= 50
-        ElseIf MoveChoice = 2 Then     'Move right
-            EnemyImage2.Left += 50
-            Enemy2X += 50
-        ElseIf MoveChoice = 3 Then      'Move down
-            EnemyImage2.Top += 50
-            Enemy2Y += 50
-        ElseIf MoveChoice = 4 Then      'Move left
-            EnemyImage2.Left -= 50
-            Enemy2X -= 50
-        Else
-            GoTo Jump2
+            MoveChoice = random.Next(1, 5)
         End If
 
-        MoveChoice = random.Next(1, 5)
         If MoveChoice = 1 Then       'Move up
-            EnemyImage3.Top -= 50
-            Enemy3Y -= 50
+            If Maze(Enemy1X, Enemy1Y - 50) = True Then
+                CheckDeath()
+                EnemyImage1.Top -= 50
+                Enemy1Y -= 50
+            Else
+                GoTo Jump1
+            End If
         ElseIf MoveChoice = 2 Then     'Move right
-            EnemyImage3.Left += 50
-            Enemy3X += 50
+            If Maze(Enemy1X + 50, Enemy1Y) = True Then
+                CheckDeath()
+                EnemyImage1.Left += 50
+                Enemy1X += 50
+            Else
+                GoTo Jump1
+            End If
         ElseIf MoveChoice = 3 Then      'Move down
-            EnemyImage3.Top += 50
-            Enemy3Y += 50
+            If Maze(Enemy1X, Enemy1Y + 50) = True Then
+                CheckDeath()
+                EnemyImage1.Top += 50
+                Enemy1Y += 50
+            Else
+                GoTo Jump1
+            End If
+        ElseIf MoveChoice = 4 Then  'Move left
+            If Maze(Enemy1X - 50, Enemy1Y) = True Then
+                CheckDeath()
+                EnemyImage1.Left -= 50
+                Enemy1X -= 50
+            Else
+                GoTo Jump1
+            End If
+        End If
+
+Jump2:
+        If Enemy2X = 0 And Enemy2Y = 0 Then
+            MoveChoice = random.Next(2, 4)         'Lower bound is inclusive, upper bound is exclusive
+        ElseIf Enemy2X = 0 And Enemy2Y = 950 Then
+            MoveChoice = random.Next(1, 3)
+        ElseIf Enemy2X = 950 And Enemy2Y = 0 Then
+            MoveChoice = random.Next(3, 5)
+        ElseIf Enemy2X = 950 And Enemy2Y = 950 Then
+            Do
+                MoveChoice = random.Next(1, 5)
+            Loop Until MoveChoice = 1 Or MoveChoice = 4
+        ElseIf 49 < Enemy2X And Enemy2X < 901 And Enemy2Y = 0 Then
+            MoveChoice = random.Next(2, 5)
+        ElseIf 49 < Enemy2X And Enemy2X < 901 And Enemy2Y = 950 Then
+            Do
+                MoveChoice = random.Next(1, 5)
+            Loop Until MoveChoice = 1 Or MoveChoice = 4 Or MoveChoice = 2
+        ElseIf Enemy2X = 0 And 49 < Enemy2Y And Enemy2Y < 901 Then
+            MoveChoice = random.Next(1, 4)
+        ElseIf Enemy2X = 950 And 49 < Enemy2Y And Enemy2Y < 901 Then
+            Do
+                MoveChoice = random.Next(1, 5)
+            Loop Until MoveChoice = 1 Or MoveChoice = 4 Or MoveChoice = 3
+        Else
+            MoveChoice = random.Next(1, 5)
+        End If
+        If MoveChoice = 1 Then       'Move up
+            If Maze(Enemy2X, Enemy2Y - 50) = True Then
+                CheckDeath()
+                EnemyImage2.Top -= 50
+                Enemy2Y -= 50
+            Else
+                GoTo Jump2
+            End If
+        ElseIf MoveChoice = 2 Then     'Move right
+            If Maze(Enemy2X + 50, Enemy2Y) = True Then
+                CheckDeath()
+                EnemyImage2.Left += 50
+                Enemy2X += 50
+            Else
+                GoTo Jump2
+            End If
+        ElseIf MoveChoice = 3 Then      'Move down
+            If Maze(Enemy2X, Enemy2Y + 50) = True Then
+                CheckDeath()
+                EnemyImage2.Top += 50
+                Enemy2Y += 50
+            Else
+                GoTo Jump2
+            End If
         ElseIf MoveChoice = 4 Then      'Move left
-            EnemyImage3.Left -= 50
-            Enemy3X -= 50
+            If Maze(Enemy2X - 50, Enemy2Y) = True Then
+                CheckDeath()
+                EnemyImage2.Left -= 50
+                Enemy2X -= 50
+            Else
+                GoTo Jump2
+            End If
+        End If
+
+Jump3:
+        If Enemy3X = 0 And Enemy3Y = 0 Then
+            MoveChoice = random.Next(2, 4)         'Lower bound is inclusive, upper bound is exclusive
+        ElseIf Enemy3X = 0 And Enemy3Y = 950 Then
+            MoveChoice = random.Next(1, 3)
+        ElseIf Enemy3X = 950 And Enemy3Y = 0 Then
+            MoveChoice = random.Next(3, 5)
+        ElseIf Enemy3X = 950 And Enemy3Y = 950 Then
+            Do
+                MoveChoice = random.Next(1, 5)
+            Loop Until MoveChoice = 1 Or MoveChoice = 4
+        ElseIf 49 < Enemy3X And Enemy3X < 901 And Enemy3Y = 0 Then
+            MoveChoice = random.Next(2, 5)
+        ElseIf 49 < Enemy3X And Enemy3X < 901 And Enemy3Y = 950 Then
+            Do
+                MoveChoice = random.Next(1, 5)
+            Loop Until MoveChoice = 1 Or MoveChoice = 4 Or MoveChoice = 2
+        ElseIf Enemy3X = 0 And 49 < Enemy3Y And Enemy3Y < 901 Then
+            MoveChoice = random.Next(1, 4)
+        ElseIf Enemy3X = 950 And 49 < Enemy3Y And Enemy3Y < 901 Then
+            Do
+                MoveChoice = random.Next(1, 5)
+            Loop Until MoveChoice = 1 Or MoveChoice = 4 Or MoveChoice = 3
+        Else
+            MoveChoice = random.Next(1, 5)
+        End If
+        If MoveChoice = 1 Then       'Move up
+            If Maze(Enemy3X, Enemy3Y - 50) = True Then
+                CheckDeath()
+                EnemyImage3.Top -= 50
+                Enemy3Y -= 50
+            Else
+                GoTo Jump3
+            End If
+        ElseIf MoveChoice = 2 Then     'Move right
+            If Maze(Enemy3X + 50, Enemy3Y) = True Then
+                CheckDeath()
+                EnemyImage3.Left += 50
+                Enemy3X += 50
+            Else
+                GoTo Jump3
+            End If
+        ElseIf MoveChoice = 3 Then      'Move down
+            If Maze(Enemy3X, Enemy3Y + 50) = True Then
+                CheckDeath()
+                EnemyImage3.Top += 50
+                Enemy3Y += 50
+            Else
+                GoTo Jump3
+            End If
+        ElseIf MoveChoice = 4 Then      'Move left
+            If Maze(Enemy3X - 50, Enemy3Y) = True Then
+                CheckDeath()
+                EnemyImage3.Left -= 50
+                Enemy3X -= 50
+            Else
+                GoTo Jump3
+            End If
         End If
 
     End Sub
@@ -336,6 +496,10 @@ Module module1
     Dim FrontierY As New List(Of Integer)   'All cells that are adjacent to a cell in the maze Y coords
     Dim FrontierCount As Integer = 0
     Dim RandomNumber As Integer
+
+    Sub Hide()
+        Form1.Hide()
+    End Sub
 
     'Marks all cells as false, and then turns the paths true. Then go through, and for all squares false, put a wall.
 
