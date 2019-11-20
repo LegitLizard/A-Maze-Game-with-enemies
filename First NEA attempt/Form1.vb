@@ -1,5 +1,4 @@
 ﻿Public Class Form1
-    'Public WithEvents SolveButton As Button
     Public WithEvents HeroImage As New PictureBox()
     Public WithEvents EnemyImage1 As New PictureBox()
     Public WithEvents EnemyImage2 As New PictureBox()
@@ -12,6 +11,7 @@
     Public Enemy2Y As Integer
     Public Enemy3X As Integer
     Public Enemy3Y As Integer
+    Public test As Integer
 
     Public Function Hero_Load() Handles MyBase.Load
         HeroImage.Name = "Hero Image"
@@ -243,6 +243,7 @@
             End If
 
         End If
+        CheckFinish()
 
         If e.KeyCode = 88 Then
             AStar()
@@ -293,9 +294,17 @@
         Next
     End Function
 
+    Public Function CheckFinish() Handles MyClass.Load
+        If HeroX = 950 And HeroY = 950 Then
+            module1.HideMaze()
+            Form2.Show()
+            Form2.WinMessage()
+        End If
+    End Function
+
     Public Sub CheckDeath()
         If HeroX = Enemy1X And HeroY = Enemy1Y Or HeroX = Enemy2X And HeroY = Enemy2Y Or HeroX = Enemy3X And HeroY = Enemy3Y Then
-            module1.Hide()
+            module1.HideMaze()
         End If
     End Sub
 
@@ -332,33 +341,33 @@ Jump1:
 
         If MoveChoice = 1 Then       'Move up
             If Maze(Enemy1X, Enemy1Y - 50) = True Then
-                CheckDeath()
                 EnemyImage1.Top -= 50
                 Enemy1Y -= 50
+                CheckDeath()
             Else
                 GoTo Jump1
             End If
         ElseIf MoveChoice = 2 Then     'Move right
             If Maze(Enemy1X + 50, Enemy1Y) = True Then
-                CheckDeath()
                 EnemyImage1.Left += 50
                 Enemy1X += 50
+                CheckDeath()
             Else
                 GoTo Jump1
             End If
         ElseIf MoveChoice = 3 Then      'Move down
             If Maze(Enemy1X, Enemy1Y + 50) = True Then
-                CheckDeath()
                 EnemyImage1.Top += 50
                 Enemy1Y += 50
+                CheckDeath()
             Else
                 GoTo Jump1
             End If
         ElseIf MoveChoice = 4 Then  'Move left
             If Maze(Enemy1X - 50, Enemy1Y) = True Then
-                CheckDeath()
                 EnemyImage1.Left -= 50
                 Enemy1X -= 50
+                CheckDeath()
             Else
                 GoTo Jump1
             End If
@@ -392,33 +401,33 @@ Jump2:
         End If
         If MoveChoice = 1 Then       'Move up
             If Maze(Enemy2X, Enemy2Y - 50) = True Then
-                CheckDeath()
                 EnemyImage2.Top -= 50
                 Enemy2Y -= 50
+                CheckDeath()
             Else
                 GoTo Jump2
             End If
         ElseIf MoveChoice = 2 Then     'Move right
             If Maze(Enemy2X + 50, Enemy2Y) = True Then
-                CheckDeath()
                 EnemyImage2.Left += 50
                 Enemy2X += 50
+                CheckDeath()
             Else
                 GoTo Jump2
             End If
         ElseIf MoveChoice = 3 Then      'Move down
             If Maze(Enemy2X, Enemy2Y + 50) = True Then
-                CheckDeath()
                 EnemyImage2.Top += 50
                 Enemy2Y += 50
+                CheckDeath()
             Else
                 GoTo Jump2
             End If
         ElseIf MoveChoice = 4 Then      'Move left
             If Maze(Enemy2X - 50, Enemy2Y) = True Then
-                CheckDeath()
                 EnemyImage2.Left -= 50
                 Enemy2X -= 50
+                CheckDeath()
             Else
                 GoTo Jump2
             End If
@@ -452,33 +461,33 @@ Jump3:
         End If
         If MoveChoice = 1 Then       'Move up
             If Maze(Enemy3X, Enemy3Y - 50) = True Then
-                CheckDeath()
                 EnemyImage3.Top -= 50
                 Enemy3Y -= 50
+                CheckDeath()
             Else
                 GoTo Jump3
             End If
         ElseIf MoveChoice = 2 Then     'Move right
             If Maze(Enemy3X + 50, Enemy3Y) = True Then
-                CheckDeath()
                 EnemyImage3.Left += 50
                 Enemy3X += 50
+                CheckDeath()
             Else
                 GoTo Jump3
             End If
         ElseIf MoveChoice = 3 Then      'Move down
             If Maze(Enemy3X, Enemy3Y + 50) = True Then
-                CheckDeath()
                 EnemyImage3.Top += 50
                 Enemy3Y += 50
+                CheckDeath()
             Else
                 GoTo Jump3
             End If
         ElseIf MoveChoice = 4 Then      'Move left
             If Maze(Enemy3X - 50, Enemy3Y) = True Then
-                CheckDeath()
                 EnemyImage3.Left -= 50
                 Enemy3X -= 50
+                CheckDeath()
             Else
                 GoTo Jump3
             End If
@@ -497,7 +506,7 @@ Module module1
     Dim FrontierCount As Integer = 0
     Dim RandomNumber As Integer
 
-    Sub Hide()
+    Sub HideMaze()
         Form1.Hide()
     End Sub
 
@@ -1076,7 +1085,6 @@ Module module1
     Dim CurrentX As Integer = 0
     Dim CurrentY As Integer = 0
     Dim count As Integer = 0        'holds the highest item number
-    'Public Item() As Node
     Public Item As New List(Of Node)
     Public PathX As New List(Of Integer)
     Public PathY As New List(Of Integer)
@@ -1096,15 +1104,14 @@ Module module1
 
     Function AStar()
 
+        For i = 0 To 100
+            Item.Add(New Node)
+        Next
+
         OpenListX.Add(0)
         OpenListY.Add(0)
 
-
-        'Item(0).g = 0
-
-
-
-
+        Item(0).g = 0
         Item(0).h = CurrentX + CurrentY
         Item(0).f = Item(0).g + Item(0).h
 

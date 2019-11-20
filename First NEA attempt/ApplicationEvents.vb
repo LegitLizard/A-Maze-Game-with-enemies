@@ -12,6 +12,9 @@ Namespace My
             module1.Main()
             Form1.Width = 1200
             Form1.Height = 1039
+            Form2.Width = 500
+            Form2.Height = 500
+
         End Sub
     End Class
 End Namespace
