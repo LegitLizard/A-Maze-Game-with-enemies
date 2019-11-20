@@ -9,12 +9,16 @@ Namespace My
     ' NetworkAvailabilityChanged: Raised when the network connection is connected or disconnected.
     Partial Friend Class MyApplication
         Private Sub MyApplication_Startup(sender As Object, e As StartupEventArgs) Handles Me.Startup
-            module1.Main()
-            Form1.Width = 1200
-            Form1.Height = 1039
+            Form2.CreateWinForm()
+            Form2.Visible = False
+            Form4.CreateLoseForm()
+            Form4.Visible = False
             Form2.Width = 500
             Form2.Height = 500
-
+            Form3.Width = 500
+            Form3.Height = 500
+            Form4.Width = 500
+            Form4.Height = 500
         End Sub
     End Class
 End Namespace

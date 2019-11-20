@@ -1,18 +1,18 @@
-﻿Public Class Form2
+﻿Public Class Form4
     Public WithEvents MenuButton As New Button
 
-    Public Sub CreateWinForm() Handles MyBase.Load
+    Public Sub CreateLoseForm() Handles MyBase.Load
 
-        Dim WinMsg As New TextBox With {
-            .Text = "Well done! You solved the maze.",
-            .Name = "Win Message",
+        Dim LoseMsg As New TextBox With {
+            .Text = "Too bad. Better luck next time.",
+            .Name = "Lose Message",
             .Location = New Point(50, 250),
-            .Size = New Size(400, 100),
-            .Font = New Font("Jokerman", 18, FontStyle.Regular),
+            .Size = New Size(300, 100),
+            .Font = New Font("Times New Roman", 18, FontStyle.Regular),
             .ReadOnly = True,
             .Visible = True,
             .BorderStyle = BorderStyle.None,
-            .BackColor = Color.GreenYellow
+            .BackColor = Color.Red
         }
         MenuButton.Size = New Size(200, 100)
         MenuButton.Font = New Font("Times New Roman", 16, FontStyle.Bold)
@@ -21,13 +21,12 @@
         MenuButton.Visible = True
         MenuButton.Location = New Point(150, 100)
         Controls.Add(MenuButton)
-        Controls.Add(WinMsg)
+        Controls.Add(LoseMsg)
     End Sub
 
     Private Sub MenuClick(ByVal sender As Object, ByVal e As EventArgs) Handles MenuButton.Click
         Form3.BackColor = Color.Orange
         Form3.Visible = True
-        module1.HideWin()
+        module1.HideLose()
     End Sub
-
 End Class

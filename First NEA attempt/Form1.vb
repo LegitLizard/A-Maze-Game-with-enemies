@@ -98,11 +98,11 @@
         Controls.Add(Info)
     End Function
 
-    Private Sub Form1_PicBox(sender As Object, e As EventArgs) Handles MyBase.Load
+    Public Sub Form1_PicBox(sender As Object, e As EventArgs) Handles MyBase.Load
         KeyPreview = True
     End Sub
 
-    Private Sub Form1_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles Me.KeyDown
+    Public Sub Form1_KeyDown(ByVal sender As Object, ByVal e As KeyEventArgs) Handles Me.KeyDown
 
         If HeroX = 0 And HeroY = 0 Then                       'Top left corner
             If e.KeyCode = Keys.Down And Maze(HeroX, HeroY + 50) = True Then
@@ -295,18 +295,27 @@
     End Function
 
     Public Function CheckFinish() Handles MyClass.Load
+
         If HeroX = 950 And HeroY = 950 Then
             module1.HideMaze()
-            Form2.Show()
-            Form2.WinMessage()
+            Form2.BackColor = Color.GreenYellow
+            Check = True
+            Form2.Visible = True
         End If
     End Function
 
-    Public Sub CheckDeath()
+    Public Check As Boolean = False
+    Public Check2 As Boolean = False
+
+    Public Function CheckDeath()
+
         If HeroX = Enemy1X And HeroY = Enemy1Y Or HeroX = Enemy2X And HeroY = Enemy2Y Or HeroX = Enemy3X And HeroY = Enemy3Y Then
             module1.HideMaze()
+            Form4.BackColor = Color.Red
+            Form4.Visible = True
+            Check2 = True
         End If
-    End Sub
+    End Function
 
     Public Sub EnemyMove()
         Dim random As New Random
@@ -508,6 +517,18 @@ Module module1
 
     Sub HideMaze()
         Form1.Hide()
+    End Sub
+
+    Sub HideWin()
+        Form2.Hide()
+    End Sub
+
+    Sub HideLose()
+        Form4.Hide()
+    End Sub
+
+    Sub HideMenu()
+        Form3.Hide()
     End Sub
 
     'Marks all cells as false, and then turns the paths true. Then go through, and for all squares false, put a wall.
