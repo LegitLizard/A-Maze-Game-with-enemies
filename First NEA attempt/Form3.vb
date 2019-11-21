@@ -24,19 +24,27 @@
     End Sub
 
     Public Sub PlayButtonClick(ByVal sender As Object, ByVal e As EventArgs) Handles PlayButton.Click
-        module1.Main()
-        Dim FirstForm As New Form1
-        Dim keypress As KeyEventArgs
-        FirstForm.Hero_Load()
-        FirstForm.Enemy_Load()
-        FirstForm.Text_Load()
-        FirstForm.CreatePicBoxes()
-        FirstForm.Show()
-        FirstForm.Width = 1200
-        FirstForm.Height = 1039
-        Do
-            FirstForm.Form1_KeyDown(sender, e:=keypress)
-        Loop While FirstForm.Check = False Or FirstForm.Check2 = False
+        FrontierX.Clear()
+        FrontierY.Clear()
+        FrontierCount = 0
+        OpenListX.Clear()
+        OpenListY.Clear()
+        ClosedListX.Clear()
+        ClosedListY.Clear()
+        fmin = 0
+        CurrentX = 0
+        CurrentY = 0
+        count = 0
+        Item.Clear()
+        PathX.Clear()
+        PathY.Clear()
+        KeepTrack = 0
+        Main()
+        Form1.Width = 1200
+        Form1.Height = 1039
+        Form1.Update()
+        Form1.Show()
+        HideMenu()
     End Sub
 
     Public Sub ExitButtonClick(ByVal sender As Object, ByVal e As EventArgs) Handles ExitButton.Click
