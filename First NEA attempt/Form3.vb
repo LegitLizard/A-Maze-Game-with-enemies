@@ -43,6 +43,7 @@
         Form1.Width = 1200
         Form1.Height = 1039
         Form1.Update()
+        Form1.StartPosition = 1
         Form1.Show()
         HideMenu()
     End Sub

@@ -297,7 +297,7 @@
     Public Function CheckFinish() Handles MyClass.Load
 
         If HeroX = 950 And HeroY = 950 Then
-            module1.HideMaze()
+            module1.CloseMaze()
             Form2.BackColor = Color.GreenYellow
             Check = True
             Form2.Visible = True
@@ -310,7 +310,7 @@
     Public Function CheckDeath()
 
         If HeroX = Enemy1X And HeroY = Enemy1Y Or HeroX = Enemy2X And HeroY = Enemy2Y Or HeroX = Enemy3X And HeroY = Enemy3Y Then
-            module1.HideMaze()
+            module1.CloseMaze()
             Form4.BackColor = Color.Red
             Form4.Visible = True
             Check2 = True
@@ -510,13 +510,13 @@ End Class
 Module module1
 
     Public Maze(950, 950) As Boolean    'If True, path is present
-    Dim FrontierX As New List(Of Integer)   'All cells that are adjacent to a cell in the maze X coords
-    Dim FrontierY As New List(Of Integer)   'All cells that are adjacent to a cell in the maze Y coords
-    Dim FrontierCount As Integer = 0
-    Dim RandomNumber As Integer
+    Public FrontierX As New List(Of Integer)   'All cells that are adjacent to a cell in the maze X coords
+    Public FrontierY As New List(Of Integer)   'All cells that are adjacent to a cell in the maze Y coords
+    Public FrontierCount As Integer = 0
+    Public RandomNumber As Integer
 
-    Sub HideMaze()
-        Form1.Hide()
+    Sub CloseMaze()
+        Form1.Close()
     End Sub
 
     Sub HideWin()
@@ -1098,36 +1098,34 @@ Module module1
         End If
     End Function
 
-    Dim OpenListX As New List(Of Integer)
-    Dim OpenListY As New List(Of Integer)
-    Dim ClosedListX As New List(Of Integer)
-    Dim ClosedListY As New List(Of Integer)
-    Dim fmin As Integer = 0
-    Dim CurrentX As Integer = 0
-    Dim CurrentY As Integer = 0
-    Dim count As Integer = 0        'holds the highest item number
+    Public OpenListX As New List(Of Integer)
+    Public OpenListY As New List(Of Integer)
+    Public ClosedListX As New List(Of Integer)
+    Public ClosedListY As New List(Of Integer)
+    Public fmin As Integer = 0
+    Public CurrentX As Integer = 0
+    Public CurrentY As Integer = 0
     Public Item As New List(Of Node)
+    Public count As Integer = 0        'holds the highest item number
     Public PathX As New List(Of Integer)
     Public PathY As New List(Of Integer)
-    Dim KeepTrack As Integer = 0
+    Public KeepTrack As Integer = 0
 
     Public Class Node
+
         Public ParentX As Integer = 0
         Public ParentY As Integer = 0
         Public PresentX As Integer = 0
         Public PresentY As Integer = 0
-        Public ChildX() As Integer
-        Public ChildY() As Integer
-        Public f As Integer = 0    'total cost of node  = g+h
-        Public g As Integer = 0      'distance from the start following path
-        Public h As Integer = 0        'heuristic best guess
+        Public ChildX As New List(Of Integer)
+        Public ChildY As New List(Of Integer)
+        Public f As Integer = 0           'total cost of node  = g+h
+        Public g As Integer = 0          'distance from the start following path
+        Public h As Integer = 0           'heuristic best guess
+
     End Class
 
     Function AStar()
-
-        For i = 0 To 100
-            Item.Add(New Node)
-        Next
 
         OpenListX.Add(0)
         OpenListY.Add(0)
