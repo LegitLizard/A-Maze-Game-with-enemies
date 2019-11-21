@@ -23,6 +23,7 @@ Namespace My
             Form2.Height = 500
             Form3.Width = 500
             Form3.Height = 500
+            Form3.BackColor = Color.Orange
             Form4.Width = 500
             Form4.Height = 500
         End Sub
