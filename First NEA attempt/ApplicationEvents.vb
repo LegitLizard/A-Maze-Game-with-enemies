@@ -12,7 +12,13 @@ Namespace My
             Form2.CreateWinForm()
             Form2.Visible = False
             Form4.CreateLoseForm()
+            Form1.StartPosition = 1
+            Form2.StartPosition = 1
+            Form3.StartPosition = 1
+            Form4.StartPosition = 1
             Form4.Visible = False
+            Form1.Width = 1200
+            Form1.Height = 1039
             Form2.Width = 500
             Form2.Height = 500
             Form3.Width = 500
