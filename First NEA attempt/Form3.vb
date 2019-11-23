@@ -27,18 +27,6 @@
         FrontierX.Clear()
         FrontierY.Clear()
         FrontierCount = 0
-        OpenListX.Clear()
-        OpenListY.Clear()
-        ClosedListX.Clear()
-        ClosedListY.Clear()
-        fmin = 0
-        CurrentX = 0
-        CurrentY = 0
-        count = 0
-        Item.Clear()
-        PathX.Clear()
-        PathY.Clear()
-        KeepTrack = 0
         Main()
         Form1.Width = 1200
         Form1.Height = 1039
