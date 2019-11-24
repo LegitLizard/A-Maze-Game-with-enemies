@@ -1,4 +1,5 @@
-﻿Public Class Form1
+﻿Imports System.Collections
+Public Class Form1
     Public WithEvents HeroImage As New PictureBox()
     Public WithEvents EnemyImage1 As New PictureBox()
     Public WithEvents EnemyImage2 As New PictureBox()
@@ -246,28 +247,28 @@
         CheckFinish()
 
         If e.KeyCode = 88 Then
-            'AStar()
-            'PaintSolution()
+            BFS()
+            PaintSolution()
         End If
 
     End Sub
 
-    'Public Sub PaintSolution() Handles Me.Load
-    '    Dim i As Integer = 1
-    '    For y = 0 To PathY.Count - 1
-    '        For x = 0 To PathX.Count - 1
-    '            Dim newPictureBox As New PictureBox
-    '            newPictureBox.Name = "PictureBox" & i
-    '            newPictureBox.Location = New Point(PathX(x), PathY(y))
-    '            newPictureBox.BorderStyle = BorderStyle.None
-    '            newPictureBox.Dock = DockStyle.None
-    '            newPictureBox.Visible = True
-    '            newPictureBox.BackColor = Color.Pink
-    '            Controls.Add(newPictureBox)
-    '            i += 1
-    '        Next
-    '    Next
-    'End Sub
+    Public Function PaintSolution()
+        Dim i As Integer = 0
+
+        For a = 0 To RouteX.Count - 1
+            Dim newPictureBox As New PictureBox
+            newPictureBox.Name = "PictureBox" & i
+            newPictureBox.Location = New Point(RouteX(i), RouteY(i))
+            newPictureBox.BorderStyle = BorderStyle.None
+            newPictureBox.Dock = DockStyle.None
+            newPictureBox.Visible = True
+            newPictureBox.BackColor = Color.Pink
+            Controls.Add(newPictureBox)
+            i += 1
+        Next
+
+    End Function
 
     Public Function CreatePicBoxes() Handles Me.Load
 
@@ -1098,6 +1099,242 @@ Module module1
         End If
     End Function
 
+    Public Class Node
+        Public ParentX As Integer
+        Public ParentY As Integer
+        Public CurrentX As Integer
+        Public CurrentY As Integer
+    End Class
+
+    Public NodeQueueX As New Queue     'stores nodes to travel to  X
+    Public NodeQueueY As New Queue    'stores nodes to travel to   Y
+    Public VisitedNodesX As New List(Of Integer)    'stores nodes already traversed X
+    Public VisitedNodesY As New List(Of Integer)    'stores nodes already traversed Y
+
+    Public Function AddNode(ByVal x As Integer, ByVal y As Integer, ByVal pY As Integer, ByVal pX As Integer)
+        Dot(count).ParentX = pX
+        Dot(count).ParentY = pY
+        Dot(count).CurrentX = x
+        Dot(count).CurrentY = y
+        count += 1
+    End Function
+
+    Public Dot(399) As Node
+    Public count As Integer = 0
+
+    Public Function BFS()
+
+        For a = 0 To 399
+            Dot(a) = New Node
+        Next
+
+        Search(0, 0)
+
+        Do
+            VisitedNodesX.Add(NodeQueueX.Peek)
+            VisitedNodesY.Add(NodeQueueY.Peek)
+            FindNeighbours(NodeQueueX.Dequeue(), NodeQueueY.Dequeue())
+            If CheckIfFin() = True Then
+                Exit Do
+            End If
+        Loop While NodeQueueX.Count <> 0
+
+        Dim record As Integer
+
+        For i = 0 To count - 1
+            If Dot(i).CurrentX = 950 And Dot(i).CurrentY = 950 Then
+                record = i
+            End If
+        Next
+
+        Dim CurX As Integer
+        Dim CurY As Integer
+
+        CurX = Dot(record).CurrentX
+        CurY = Dot(record).CurrentY
+        Console.Beep()
+        Do
+            For i = 0 To count
+
+                If Dot(i).CurrentX = CurX And Dot(i).CurrentY = CurY Then
+                    CurX = Dot(i).ParentX
+                    CurY = Dot(i).ParentY
+                    RouteX.Add(CurX)
+                    RouteY.Add(CurY)
+                    Exit For
+                End If
+            Next
+        Loop Until CurX = 0 And CurY = 0
+        Console.Beep()
+    End Function
+
+    Public RouteX As New List(Of Integer)
+    Public RouteY As New List(Of Integer)
+
+
+    Function Search(ByVal x As Integer, ByVal y As Integer)
+        VisitedNodesX.Add(x)
+        VisitedNodesY.Add(y)
+        FindNeighbours(x, y)
+    End Function
+
+    Function CheckIfFin()
+        Dim CheckArrayX(NodeQueueX.Count) As Integer
+        Dim CheckArrayY(NodeQueueY.Count) As Integer
+        NodeQueueX.CopyTo(CheckArrayX, 0)
+        NodeQueueY.CopyTo(CheckArrayY, 0)
+
+        For i = 0 To NodeQueueY.Count
+            If CheckArrayX(i) = 950 And CheckArrayY(i) = 950 Then
+                Return True
+            End If
+        Next
+        Return False
+    End Function
+
+    Function FindNeighbours(ByVal x As Integer, ByVal y As Integer)
+
+        If x = 0 And y = 0 Then
+            If Maze(x + 50, y) = True And IsInVisited(x + 50, y) = False Then    'Right
+                NodeQueueX.Enqueue(x + 50)
+                NodeQueueY.Enqueue(y)
+                AddNode(x + 50, y, x, y)
+            End If
+            If Maze(x, y + 50) = True And IsInVisited(x, y + 50) = False Then    'Down
+                NodeQueueX.Enqueue(x)
+                NodeQueueY.Enqueue(y + 50)
+                AddNode(x, y + 50, x, y)
+            End If
+        ElseIf x = 950 And y = 0 Then
+            If Maze(x - 50, y) = True And IsInVisited(x - 50, y) = False Then      'Left
+                NodeQueueX.Enqueue(x - 50)
+                NodeQueueY.Enqueue(y)
+                AddNode(x - 50, y, x, y)
+            End If
+            If Maze(x, y + 50) = True And IsInVisited(x, y + 50) = False Then      'Down
+                NodeQueueX.Enqueue(x)
+                NodeQueueY.Enqueue(y + 50)
+                AddNode(x, y + 50, x, y)
+            End If
+        ElseIf x = 950 And y = 950 Then
+            If Maze(x, y - 50) = True And IsInVisited(x, y - 50) = False Then      'Up
+                NodeQueueX.Enqueue(x)
+                NodeQueueY.Enqueue(y - 50)
+                AddNode(x, y - 50, x, y)
+            End If
+            If Maze(x - 50, y) = True And IsInVisited(x - 50, y) = False Then      'Left
+                NodeQueueX.Enqueue(x - 50)
+                NodeQueueY.Enqueue(y)
+                AddNode(x - 50, y, x, y)
+            End If
+        ElseIf x = 0 And y = 950 Then
+            If Maze(x, y - 50) = True And IsInVisited(x, y - 50) = False Then      'Up
+                NodeQueueX.Enqueue(x)
+                NodeQueueY.Enqueue(y - 50)
+                AddNode(x, y - 50, x, y)
+            End If
+            If Maze(x + 50, y) = True And IsInVisited(x + 50, y) = False Then    'Right
+                NodeQueueX.Enqueue(x + 50)
+                NodeQueueY.Enqueue(y)
+                AddNode(x + 50, y, x, y)
+            End If
+        ElseIf 49 < x And x < 901 And y = 0 Then
+            If Maze(x, y + 50) = True And IsInVisited(x, y + 50) = False Then      'Down
+                NodeQueueX.Enqueue(x)
+                NodeQueueY.Enqueue(y + 50)
+                AddNode(x, y + 50, x, y)
+            End If
+            If Maze(x - 50, y) = True And IsInVisited(x - 50, y) = False Then      'Left
+                NodeQueueX.Enqueue(x - 50)
+                NodeQueueY.Enqueue(y)
+                AddNode(x - 50, y, x, y)
+            End If
+            If Maze(x + 50, y) = True And IsInVisited(x + 50, y) = False Then    'Right
+                NodeQueueX.Enqueue(x + 50)
+                NodeQueueY.Enqueue(y)
+                AddNode(x + 50, y, x, y)
+            End If
+        ElseIf x = 950 And 49 < y And y < 901 Then
+            If Maze(x, y - 50) = True And IsInVisited(x, y - 50) = False Then      'Up
+                NodeQueueX.Enqueue(x)
+                NodeQueueY.Enqueue(y - 50)
+                AddNode(x, y - 50, x, y)
+            End If
+            If Maze(x - 50, y) = True And IsInVisited(x - 50, y) = False Then      'Left
+                NodeQueueX.Enqueue(x - 50)
+                NodeQueueY.Enqueue(y)
+                AddNode(x - 50, y, x, y)
+            End If
+            If Maze(x, y + 50) = True And IsInVisited(x, y + 50) = False Then      'Down
+                NodeQueueX.Enqueue(x)
+                NodeQueueY.Enqueue(y + 50)
+                AddNode(x, y + 50, x, y)
+            End If
+        ElseIf 49 < x And x < 901 And y = 950 Then
+            If Maze(x + 50, y) = True And IsInVisited(x + 50, y) = False Then    'Right
+                NodeQueueX.Enqueue(x + 50)
+                NodeQueueY.Enqueue(y)
+                AddNode(x + 50, y, x, y)
+            End If
+            If Maze(x, y - 50) = True And IsInVisited(x, y - 50) = False Then      'Up
+                NodeQueueX.Enqueue(x)
+                NodeQueueY.Enqueue(y - 50)
+                AddNode(x, y - 50, x, y)
+            End If
+            If Maze(x - 50, y) = True And IsInVisited(x - 50, y) = False Then      'Left
+                NodeQueueX.Enqueue(x - 50)
+                NodeQueueY.Enqueue(y)
+                AddNode(x - 50, y, x, y)
+            End If
+        ElseIf x = 0 And 49 < y And y < 901 Then
+            If Maze(x, y + 50) = True And IsInVisited(x, y + 50) = False Then      'Down
+                NodeQueueX.Enqueue(x)
+                NodeQueueY.Enqueue(y + 50)
+                AddNode(x, y + 50, x, y)
+            End If
+            If Maze(x + 50, y) = True And IsInVisited(x + 50, y) = False Then    'Right
+                NodeQueueX.Enqueue(x + 50)
+                NodeQueueY.Enqueue(y)
+                AddNode(x + 50, y, x, y)
+            End If
+            If Maze(x, y - 50) = True And IsInVisited(x, y - 50) = False Then      'Up
+                NodeQueueX.Enqueue(x)
+                NodeQueueY.Enqueue(y - 50)
+                AddNode(x, y - 50, x, y)
+            End If
+        Else
+            If Maze(x - 50, y) = True And IsInVisited(x - 50, y) = False Then      'Left
+                NodeQueueX.Enqueue(x - 50)
+                NodeQueueY.Enqueue(y)
+                AddNode(x - 50, y, x, y)
+            End If
+            If Maze(x, y + 50) = True And IsInVisited(x, y + 50) = False Then      'Down
+                NodeQueueX.Enqueue(x)
+                NodeQueueY.Enqueue(y + 50)
+                AddNode(x, y + 50, x, y)
+            End If
+            If Maze(x + 50, y) = True And IsInVisited(x + 50, y) = False Then    'Right
+                NodeQueueX.Enqueue(x + 50)
+                NodeQueueY.Enqueue(y)
+                AddNode(x + 50, y, x, y)
+            End If
+            If Maze(x, y - 50) = True And IsInVisited(x, y - 50) = False Then      'Up
+                NodeQueueX.Enqueue(x)
+                NodeQueueY.Enqueue(y - 50)
+                AddNode(x, y - 50, x, y)
+            End If
+        End If
+
+    End Function
+
+    Function IsInVisited(ByVal x As Integer, ByVal y As Integer)
+        For i = 0 To VisitedNodesX.Count - 1
+            If VisitedNodesX(i) = x And VisitedNodesY(i) = y Then
+                Return True
+            End If
+        Next
+        Return False
+    End Function
 
 
 End Module
