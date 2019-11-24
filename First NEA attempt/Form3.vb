@@ -12,7 +12,6 @@
         PlayButton.Location = New Point(150, 100)
         PlayButton.BackColor = Color.Orange
         Controls.Add(PlayButton)
-
         ExitButton.Size = New Size(200, 100)
         ExitButton.Font = New Font("Times New Roman", 16, FontStyle.Bold)
         ExitButton.Text = "Exit"

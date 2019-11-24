@@ -252,8 +252,8 @@ Public Class Form1
         End If
 
     End Sub
-
-    Public Function PaintSolution()
+    Dim bonk As Boolean = False
+    Public Function PaintSolution() Handles Me.Load
         Dim i As Integer = 0
 
         For a = 0 To RouteX.Count - 1
@@ -264,14 +264,25 @@ Public Class Form1
             newPictureBox.Dock = DockStyle.None
             newPictureBox.Visible = True
             newPictureBox.BackColor = Color.Pink
+            newPictureBox.BringToFront()
+            newPictureBox.Show()
+
             Controls.Add(newPictureBox)
             i += 1
         Next
+        bonk = True
+        CreatePicBoxes()
+    End Function
 
+    Public Function CheckPath(ByVal x As Integer, ByVal y As Integer)
+        For i = 0 To RouteX.Count - 1
+            If RouteX(i) = x And RouteY(i) = y Then
+                Return True
+            End If
+        Next
     End Function
 
     Public Function CreatePicBoxes() Handles Me.Load
-
         Dim i As Integer = 1
         For y = 0 To 950 Step 50
             For x = 0 To 950 Step 50
@@ -281,7 +292,12 @@ Public Class Form1
                 newPictureBox.Size = New Size(50, 50)
                 newPictureBox.BorderStyle = BorderStyle.None
                 newPictureBox.Dock = DockStyle.None
-                newPictureBox.Visible = True
+                If bonk = True And Maze(x, y) = True And CheckPath(x, y) = True Then
+                    newPictureBox.Visible = False
+                Else
+                    newPictureBox.Visible = True
+                    newPictureBox.Show()
+                End If
                 If x = 950 And y = 950 Then
                     newPictureBox.BackColor = Color.Green
                 ElseIf Maze(x, y) = True Then
@@ -1111,7 +1127,7 @@ Module module1
     Public VisitedNodesX As New List(Of Integer)    'stores nodes already traversed X
     Public VisitedNodesY As New List(Of Integer)    'stores nodes already traversed Y
 
-    Public Function AddNode(ByVal x As Integer, ByVal y As Integer, ByVal pY As Integer, ByVal pX As Integer)
+    Public Function AddNode(ByVal x As Integer, ByVal y As Integer, ByVal pX As Integer, ByVal pY As Integer)
         Dot(count).ParentX = pX
         Dot(count).ParentY = pY
         Dot(count).CurrentX = x
@@ -1152,7 +1168,7 @@ Module module1
 
         CurX = Dot(record).CurrentX
         CurY = Dot(record).CurrentY
-        Console.Beep()
+
         Do
             For i = 0 To count
 
@@ -1165,7 +1181,7 @@ Module module1
                 End If
             Next
         Loop Until CurX = 0 And CurY = 0
-        Console.Beep()
+
     End Function
 
     Public RouteX As New List(Of Integer)
