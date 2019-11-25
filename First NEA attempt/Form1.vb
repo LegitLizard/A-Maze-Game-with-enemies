@@ -246,13 +246,25 @@ Public Class Form1
         End If
         CheckFinish()
 
-        If e.KeyCode = 88 Then
+        If e.KeyCode = 88 And Used = False Then
             BFS()
+
+            For i As Integer = Me.Controls.Count - 1 To 0 Step -1
+                If TypeOf Me.Controls(i) Is PictureBox Then
+                    Me.Controls.RemoveAt(i)
+                End If
+            Next
+            Enemy_Load()
+            Hero_Load()
             PaintSolution()
+            CreatePicBoxes()
+            Used = True
         End If
 
     End Sub
-    Dim bonk As Boolean = False
+
+    Public Used As Boolean = False
+
     Public Function PaintSolution() Handles Me.Load
         Dim i As Integer = 0
 
@@ -263,15 +275,14 @@ Public Class Form1
             newPictureBox.BorderStyle = BorderStyle.None
             newPictureBox.Dock = DockStyle.None
             newPictureBox.Visible = True
+            newPictureBox.Size = New Size(50, 50)
             newPictureBox.BackColor = Color.Pink
             newPictureBox.BringToFront()
             newPictureBox.Show()
-
             Controls.Add(newPictureBox)
             i += 1
         Next
-        bonk = True
-        CreatePicBoxes()
+
     End Function
 
     Public Function CheckPath(ByVal x As Integer, ByVal y As Integer)
@@ -292,12 +303,8 @@ Public Class Form1
                 newPictureBox.Size = New Size(50, 50)
                 newPictureBox.BorderStyle = BorderStyle.None
                 newPictureBox.Dock = DockStyle.None
-                If bonk = True And Maze(x, y) = True And CheckPath(x, y) = True Then
-                    newPictureBox.Visible = False
-                Else
-                    newPictureBox.Visible = True
-                    newPictureBox.Show()
-                End If
+                newPictureBox.Visible = True
+                newPictureBox.Show()
                 If x = 950 And y = 950 Then
                     newPictureBox.BackColor = Color.Green
                 ElseIf Maze(x, y) = True Then
