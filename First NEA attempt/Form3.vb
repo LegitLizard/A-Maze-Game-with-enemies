@@ -26,6 +26,14 @@
         FrontierX.Clear()
         FrontierY.Clear()
         FrontierCount = 0
+        Form1.Used = False
+        NodeQueueX.Clear()
+        NodeQueueY.Clear()
+        VisitedNodesX.Clear()
+        VisitedNodesY.Clear()
+        RouteX.Clear()
+        RouteY.Clear()
+        count = 0
         Main()
         Form1.Width = 1200
         Form1.Height = 1039

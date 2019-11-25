@@ -254,6 +254,7 @@ Public Class Form1
                     Me.Controls.RemoveAt(i)
                 End If
             Next
+
             Enemy_Load()
             Hero_Load()
             PaintSolution()
@@ -263,6 +264,8 @@ Public Class Form1
 
     End Sub
 
+    Public CurrentX As Integer
+    Public CurrentY As Integer
     Public Used As Boolean = False
 
     Public Function PaintSolution() Handles Me.Load
