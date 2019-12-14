@@ -251,7 +251,7 @@ Public Class Form1
 
             For i As Integer = Me.Controls.Count - 1 To 0 Step -1
                 If TypeOf Me.Controls(i) Is PictureBox Then
-                    Me.Controls.RemoveAt(i)
+                    Controls.RemoveAt(i)
                 End If
             Next
 
@@ -259,6 +259,7 @@ Public Class Form1
             Hero_Load()
             PaintSolution()
             CreatePicBoxes()
+            module1.Update()
             Used = True
         End If
 
@@ -559,6 +560,10 @@ Module module1
     End Sub
 
     'Marks all cells as false, and then turns the paths true. Then go through, and for all squares false, put a wall.
+
+    Public Sub Update()
+        Form1.Update()
+    End Sub
 
     Sub Main()
         Randomize()
@@ -1163,7 +1168,7 @@ Module module1
             If CheckIfFin() = True Then
                 Exit Do
             End If
-        Loop While NodeQueueX.Count <> 0
+        Loop While NodeQueueX.Count <> 0 Or CheckIfFin() = False
 
         Dim record As Integer
 
