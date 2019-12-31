@@ -1162,9 +1162,7 @@ Module module1
         Search(0, 0)
 
         Do
-            VisitedNodesX.Add(NodeQueueX.Peek)
-            VisitedNodesY.Add(NodeQueueY.Peek)
-            FindNeighbours(NodeQueueX.Dequeue(), NodeQueueY.Dequeue())
+            Search(NodeQueueX.Dequeue(), NodeQueueY.Dequeue())
             If CheckIfFin() = True Then
                 Exit Do
             End If
