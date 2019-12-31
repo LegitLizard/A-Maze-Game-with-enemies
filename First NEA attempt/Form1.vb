@@ -1163,9 +1163,6 @@ Module module1
 
         Do
             Search(NodeQueueX.Dequeue(), NodeQueueY.Dequeue())
-            'If CheckIfFin() = True Then
-            '    Exit Do
-            'End If
         Loop Until NodeQueueX.Count = 0 Or CheckIfFin() = True
 
         Dim record As Integer
